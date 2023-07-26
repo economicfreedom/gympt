@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Feed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .feed {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .post {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .post-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .post-author {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .post-content {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    <a sec:authorize="isAuthenticated()" href="/user/logout">로그아웃</a>
+    <a sec:authorize="isAnonymous()" href="/user/login">로그인</a>
+</div>
+    <div class="feed">
+        <div class="post">
+            <div class="post-title">Post Title 1</div>
+            <div class="post-author">Posted by John Doe</div>
+            <div class="post-content">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quis risus eget urna mollis ornare vel eu leo.
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="post-title">Post Title 2</div>
+            <div class="post-author">Posted by Jane Doe</div>
+            <div class="post-content">
+                Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.
+            </div>
+        </div>
+
+        <!-- Add more posts here as needed -->
+    </div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        /* Common styles for all screen sizes */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Styles for smaller screens (e.g., smartphones) */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 400px;
+            }
+        }
+
+        /* Styles for larger screens (e.g., tablets and desktops) */
+        @media (min-width: 601px) {
+            .container {
+                max-width: 600px;
+            }
+        }
+
+        /* Additional style for the small text description below the password field */
+        small {
+            font-size: 12px;
+            color: #666;
+            display: block;
+        }
+
+        /* 추가된 스타일 클래스 */
+        .invalid-input {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Sign Up</h1>
+    <form action="/user/register" method="POST" th:object="${userRequest}" name="signupForm"
+          onsubmit="return validateForm()">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <label for="name">성함</label>
+        <input type="text" name="name" id="name" placeholder="Name" required>
+        <br>
+        <label for="uid">아이디</label>
+        <input type="text" name="uid" id="uid" placeholder="UserID" required>
+        <br>
+        <label for="password">비밀번호:</label>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <small>8글자에서 16글자 까지이며 대소문자와 숫자가 포함되어야 합니다.</small>
+        <br>
+        <label for="password2">비밀번호 재확인</label>
+        <input type="password" name="password2" id="password2" placeholder="Password Confirmation" required>
+        <br>
+        <label for="email">이메일</label>
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        <br>
+        <label for="simple_addr">거주 도시</label>
+
+        <input type="text" name="simple_addr" id="simple_addr" placeholder="City" required>
+        <small>거주중인 도시명을 입력해주세요 ex) 서울,광주,창원</small>
+        <br>
+        <label for="nick_name">닉네임</label>
+        <input type="text" name="nick_name" id="nick_name" placeholder="Nickname" required>
+        <br>
+        <input type="submit" value="Sign Up">
+    </form>
+    <a href="#">Already have an account? Log in</a>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // jQuery를 사용한 유효성 검사
+    $(document).ready(function () {
+        $("#signupForm").submit(function (e) {
+            e.preventDefault(); // 기본 제출 동작을 막음
+
+            // 입력된 값 가져오기
+            var name = $("input[name='name']").val();
+            var email = $("input[name='email']").val();
+            var simpleAddr = $("input[name='simple_addr']").val();
+            var uid = $("input[name='uid']").val();
+            var password = $("input[name='password']").val();
+            var nickName = $("input[name='nick_name']").val();
+            var password2 = $("input[name='password2']").val();
+            // 아이디, 이메일, 닉네임 유효성 검사 (예시)
+            var uidRegex = /^[a-z0-9]{3,16}$/; // 아이디는 3~16자, 영어 소문자와 숫자만 허용
+
+            // input 요소를 모두 초기화 (이전 유효성 검사 통과 시 스타일 초기화)
+            $("input").removeClass("invalid-input");
+
+            if (!uidRegex.test(uid)) {
+                $("input[name='uid']").addClass("invalid-input");
+                alert("유효한 아이디 형식이 아닙니다.");
+                return;
+            }
+
+            // 이메일 유효성 검사 (예시)
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 이메일 형식 검사
+            if (!emailRegex.test(email)) {
+                $("input[name='email']").addClass("invalid-input");
+                alert("유효한 이메일 형식이 아닙니다.");
+                return;
+            }
+
+            // 닉네임 유효성 검사 (예시)
+            var nickNameRegex = /^[a-zA-Z0-9ㄱ-ㅎ가-힣]{1,10}$/; // 닉네임은 1~10자, 영문 대소문자, 숫자, 한글만 허용
+            if (!nickNameRegex.test(nickName)) {
+                $("input[name='nick_name']").addClass("invalid-input");
+                alert("유효한 닉네임 형식이 아닙니다");
+                return;
+            }
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,16}$/; // 영어 대문자와 소문자를 포함하고 최소 8글자 이상 최대 16글자
+            if (!passwordRegex.test(password)) {
+                $("input[name='password']").addClass("invalid-input");
+                alert("비밀번호는 대문자와 소문를 포함한 8글자에서 16글자여야 합니다.");
+                return;
+            }
+            if (password !== password2) {
+                $("input[name='password']").addClass("invalid-input");
+                $("input[name='password2']").addClass("invalid-input");
+
+                return;
+            }
+
+            // 유효성 검사 통과 시 서버로 폼 제출
+            // var formData = {
+            //     name: $("#name").val(),
+            //     uid: $("#uid").val(),
+            //     password: $("#password").val(),
+            //     password2: $("#password2").val(),
+            //     email: $("#email").val(),
+            //     simple_addr: $("#simple_addr").val(),
+            //     nick_name: $("#nick_name").val()
+            // };
+            //
+            // // Ajax 요청 설정
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/user/regi",
+            //     data: JSON.stringify(formData),
+            //     contentType: "application/json",
+            //     dataType: "json",
+            //     success: function (data) {
+            //
+            //     },
+            //     error: function (xhr, textStatus, errorThrown) {
+            //         // 서버 에러 발생
+            //         console.error("에러:", textStatus, errorThrown);
+            //     }
+            // });
+
+
+        });
+    });
+</script>
+</body>
+</html>
