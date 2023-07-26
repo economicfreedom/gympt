@@ -36,4 +36,5 @@ public class UserServiceSecurity implements UserDetailsService {
         }
         return new User(user.getUid(),user.getPassword(), authorities);
     }
+
 }

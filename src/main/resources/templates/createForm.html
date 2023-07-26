@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>게시글 등록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #000;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .drop-container {
+            border: 2px dashed #999;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        /* Add a class to show a highlight when hovering over the drop container */
+        .highlight {
+            border-color: #000;
+        }
+
+        /* Hide the default file input button */
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<h1>게시글 등록</h1>
+<form action="/submit-post" method="post">
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="content">내용</label>
+    <textarea id="content" name="content" rows="5" required></textarea>
+
+    <label for="user">작성자</label>
+    <input type="text" id="user" name="user" required>
+
+    <label for="boardType">게시판 유형</label>
+    <select id="boardType" name="boardType" required>
+        <option value="공지사항">공지사항</option>
+        <option value="자유게시판">자유게시판</option>
+        <option value="질문과답변">질문과답변</option>
+    </select>
+    <div class="drop-container" id="dropContainer">
+        <span class="drop-message">Drag and drop an image here or click to browse</span>
+        <input type="file" id="fileInput" accept="image/*">
+    </div>
+    <button type="submit">등록</button>
+</form>
+<script>
+    // Add the JavaScript code here to handle the drag and drop functionality
+    const dropContainer = document.getElementById('dropContainer');
+    const fileInput = document.getElementById('fileInput');
+
+    dropContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropContainer.classList.add('highlight');
+    });
+
+    dropContainer.addEventListener('dragleave', () => {
+        dropContainer.classList.remove('highlight');
+    });
+
+    dropContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropContainer.classList.remove('highlight');
+
+        const file = e.dataTransfer.files[0];
+        handleFile(file);
+    });
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        handleFile(file);
+    });
+
+    function handleFile(file) {
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                // Store the file data as a base64-encoded string in a hidden input field
+                const imageData = reader.result;
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'imageData';
+                hiddenInput.value = imageData;
+                document.getElementById('postForm').appendChild(hiddenInput);
+
+                // Display the image preview
+                const img = new Image();
+                img.src = imageData;
+                img.onload = function () {
+                    dropContainer.innerHTML = '';
+                    dropContainer.appendChild(img);
+                };
+            };
+
+            reader.readAsDataURL(file);
+        } else {
+            alert('Please select a valid image file.');
+        }
+    }
+</script>
+</body>
+</html>
