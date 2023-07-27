@@ -22,6 +22,8 @@ public class BoardEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String nickName;
+
     @Column(name = "title", nullable = false)
     private String title;
 

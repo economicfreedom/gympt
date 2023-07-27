@@ -69,10 +69,10 @@
           onsubmit="return validateForm()">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
         <label for="name">성함</label>
-        <input type="text" name="name" id="name" placeholder="Name" required>
+        <input type="text" name="name" id="name" placeholder="Name" required th:value="${request.getName()}">
         <br>
         <label for="uid">아이디</label>
-        <input type="text" name="uid" id="uid" placeholder="UserID" required>
+        <input type="text" name="uid" id="uid" placeholder="UserID" required th:value="${request.getUid()}">
         <br>
         <label for="password">비밀번호:</label>
         <input type="password" name="password" id="password" placeholder="Password" required>
@@ -82,15 +82,15 @@
         <input type="password" name="password2" id="password2" placeholder="Password Confirmation" required>
         <br>
         <label for="email">이메일</label>
-        <input type="email" name="email" id="email" placeholder="Email" required>
+        <input type="email" name="email" id="email"  placeholder="Email" required th:value="${request.getEmail() }">
         <br>
         <label for="simple_addr">거주 도시</label>
 
-        <input type="text" name="simple_addr" id="simple_addr" placeholder="City" required>
+        <input type="text" name="simple_addr" id="simple_addr" placeholder="City" required th:value="${request.getSimpleAddr()}">
         <small>거주중인 도시명을 입력해주세요 ex) 서울,광주,창원</small>
         <br>
         <label for="nick_name">닉네임</label>
-        <input type="text" name="nick_name" id="nick_name" placeholder="Nickname" required>
+        <input type="text" name="nick_name" id="nick_name" placeholder="Nickname" required th:value="${request.getNickName()}">
         <br>
         <input type="submit" value="Sign Up">
     </form>

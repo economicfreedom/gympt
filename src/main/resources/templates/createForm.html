@@ -72,86 +72,142 @@
         #fileInput {
             display: none;
         }
+
+        .drop-container {
+            /* ... Existing styles ... */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #thumbnail {
+            max-width: 100%;
+            max-height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display: none;
+        }
+
+        img:hover {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <h1>게시글 등록</h1>
-<form action="/submit-post" method="post">
+<form action="/create" method="post">
     <label for="title">제목</label>
     <input type="text" id="title" name="title" required>
 
     <label for="content">내용</label>
     <textarea id="content" name="content" rows="5" required></textarea>
 
-    <label for="user">작성자</label>
-    <input type="text" id="user" name="user" required>
+
 
     <label for="boardType">게시판 유형</label>
     <select id="boardType" name="boardType" required>
-        <option value="공지사항">공지사항</option>
-        <option value="자유게시판">자유게시판</option>
+        <option value="문의사항">문의사항</option>
+        <option value="버그제보">버그제보</option>
         <option value="질문과답변">질문과답변</option>
     </select>
-    <div class="drop-container" id="dropContainer">
-        <span class="drop-message">Drag and drop an image here or click to browse</span>
-        <input type="file" id="fileInput" accept="image/*">
-    </div>
+    <!--    <div class="drop-container" id="dropContainer">-->
+    <!--        <span class="drop-message">Drag and drop an image here or click to browse</span>-->
+    <!--        <input type="file" id="fileInput" accept="image/*">-->
+    <!--        <img id="thumbnail" src="" alt="Thumbnail">-->
+    <!--    </div>-->
     <button type="submit">등록</button>
 </form>
 <script>
     // Add the JavaScript code here to handle the drag and drop functionality
-    const dropContainer = document.getElementById('dropContainer');
-    const fileInput = document.getElementById('fileInput');
-
-    dropContainer.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropContainer.classList.add('highlight');
-    });
-
-    dropContainer.addEventListener('dragleave', () => {
-        dropContainer.classList.remove('highlight');
-    });
-
-    dropContainer.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropContainer.classList.remove('highlight');
-
-        const file = e.dataTransfer.files[0];
-        handleFile(file);
-    });
-
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files[0];
-        handleFile(file);
-    });
-
-    function handleFile(file) {
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-
-            reader.onload = function () {
-                // Store the file data as a base64-encoded string in a hidden input field
-                const imageData = reader.result;
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'imageData';
-                hiddenInput.value = imageData;
-                document.getElementById('postForm').appendChild(hiddenInput);
-
-                // Display the image preview
-                const img = new Image();
-                img.src = imageData;
-                img.onload = function () {
-                    dropContainer.innerHTML = '';
-                    dropContainer.appendChild(img);
-                };
-            };
-
-            reader.readAsDataURL(file);
-        } else {
-            alert('Please select a valid image file.');
-        }
-    }
+    // const dropContainer = document.getElementById('dropContainer');
+    // const fileInput = document.getElementById('fileInput');
+    //
+    // dropContainer.addEventListener('dragover', (e) => {
+    //     e.preventDefault();
+    //     dropContainer.classList.add('highlight');
+    // });
+    //
+    // dropContainer.addEventListener('dragleave', () => {
+    //     dropContainer.classList.remove('highlight');
+    // });
+    //
+    // dropContainer.addEventListener('drop', (e) => {
+    //     e.preventDefault();
+    //     dropContainer.classList.remove('highlight');
+    //
+    //     const file = e.dataTransfer.files[0];
+    //     handleFile(file);
+    // });
+    //
+    // fileInput.addEventListener('change', () => {
+    //     const file = fileInput.files[0];
+    //     handleFile(file);
+    // });
+    //
+    // function handleFile(file) {
+    //     if (file && file.type.startsWith('image/')) {
+    //         const reader = new FileReader();
+    //
+    //         reader.onload = function () {
+    //             // Store the file data as a base64-encoded string in a hidden input field
+    //             const imageData = reader.result;
+    //             const hiddenInput = document.createElement('input');
+    //             hiddenInput.type = 'hidden';
+    //             hiddenInput.name = 'imageData';
+    //             hiddenInput.value = imageData;
+    //             document.getElementById('postForm').appendChild(hiddenInput);
+    //
+    //             // Display the image preview
+    //             const img = new Image();
+    //             img.src = imageData;
+    //             img.onload = function () {
+    //                 dropContainer.innerHTML = '';
+    //                 dropContainer.appendChild(img);
+    //             };
+    //         };
+    //
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         alert('Please select a valid image file.');
+    //     }
+    // }
+    //
+    // const thumbnail = document.getElementById('thumbnail');
+    //
+    // function handleFile(file) {
+    //     if (file && file.type.startsWith('image/')) {
+    //         const reader = new FileReader();
+    //
+    //         reader.onload = function () {
+    //             const imageData = reader.result;
+    //
+    //             // Show the thumbnail
+    //             thumbnail.src = imageData;
+    //             thumbnail.style.display = 'block';
+    //
+    //             // Store the file data as a base64-encoded string in a hidden input field
+    //             const hiddenInput = document.createElement('input');
+    //             hiddenInput.type = 'hidden';
+    //             hiddenInput.name = 'imageData';
+    //             hiddenInput.value = imageData;
+    //             document.getElementById('postForm').appendChild(hiddenInput);
+    //         };
+    //
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         alert('Please select a valid image file.');
+    //     }
+    // }
+    //
+    // // Add a click event to the thumbnail to remove the uploaded image
+    // thumbnail.addEventListener('click', () => {
+    //     thumbnail.src = '';
+    //     thumbnail.style.display = 'none';
+    //     document.querySelector('input[name="imageData"]').remove();
+    // });
 </script>
 </body>
 </html>

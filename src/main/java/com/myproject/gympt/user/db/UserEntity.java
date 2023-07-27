@@ -40,4 +40,6 @@ public class UserEntity {
 
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
+    @Column(name = "gpt_count")
+    private Byte gptCount;
 }

@@ -38,4 +38,5 @@ public class UserRequest {
     private Long id;
 
     private String nickName;
+
 }
