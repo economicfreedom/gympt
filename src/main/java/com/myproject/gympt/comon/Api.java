@@ -1,4 +1,4 @@
-package com.myproject.gympt;
+package com.myproject.gympt.comon;
 
 import lombok.*;
 

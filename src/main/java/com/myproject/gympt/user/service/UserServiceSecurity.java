@@ -18,23 +18,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceSecurity implements UserDetailsService {
     private final UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-        var _user =  userRepository.findByUid(uid);
+        var _user = userRepository.findByUid(uid);
 
-        if (_user.isEmpty()){
+        if (_user.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
 
         UserEntity user = _user.get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
- if ("admin".equals(uid)) {
+        if ("admin".equals(uid)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
-        return new User(user.getUid(),user.getPassword(), authorities);
+        return new User(user.getUid(), user.getPassword(), authorities);
     }
 
 }
+

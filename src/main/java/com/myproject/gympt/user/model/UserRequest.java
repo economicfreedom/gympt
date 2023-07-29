@@ -21,22 +21,24 @@ public class UserRequest {
 
 
     private String name;
-    @Pattern(regexp = "^[a-z0-9]{3,16}$",message = "소문자와 숫자를 포함하여 3글자에서 16글자 사이여야 합니다")
     @NotEmpty(message = "사용자ID는 필수항목입니다.")
+    @Pattern(regexp = "^[a-z0-9]{3,16}$",message = "소문자와 숫자를 포함하여 3글자에서 16글자 사이여야 합니다")
     private String uid;
     @NotEmpty(message = "비밀번호는 필수항목입니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{3,16}$",message = "소문자와 숫자를 포함하여 3글자에서 16글자 사이여야 합니다")
     private String password;
+    @Pattern(regexp = "^[a-zA-Z0-9]{3,16}$",message = "소문자와 숫자를 포함하여 3글자에서 16글자 사이여야 합니다")
     @NotEmpty(message = "비밀번호확인은 필수항목입니다.")
     private String password2;
 
     @Email
     @NotEmpty(message = "이메일은 필수항목입니다.")
     private String email;
-
+    @NotEmpty(message = "인증 메세지를 입력해주세요")
+    private String memailconfirm;
     private String simpleAddr;
 
     private Long id;
 
     private String nickName;
-
 }

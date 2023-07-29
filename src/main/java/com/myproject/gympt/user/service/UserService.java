@@ -14,10 +14,12 @@ import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
+
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserConverter userConverter;
+
 
     public UserDTO create(UserRequest userRequest){
         UserEntity user = UserEntity.builder()
@@ -35,16 +37,31 @@ public class UserService {
 
         return dto;
     }
-    public UserEntity getUser(String uid) throws DataFormatException {
+    public UserDTO getUser(String uid) throws DataFormatException {
         Optional<UserEntity> byUid = userRepository.findByUid(uid);
-        if (byUid.isPresent()){
-            return byUid.get();
-        }else {
-            throw new DataFormatException("존재하지 않는 유저입니다");
-        }
+
+        return getUserDTO(byUid);
     }
 
 
 
+
+    public boolean haEmail(String email){
+        Optional<UserEntity> byEmail = userRepository.findByEmail(email);
+        return byEmail.isEmpty();
+    }
+
+    public UserDTO getNickName(String nick){
+        Optional<UserEntity> byNickName = userRepository.findByNickName(nick);
+        return getUserDTO(byNickName);
+
+    }
+    private UserDTO getUserDTO(Optional<UserEntity> keyWord) {
+        if (keyWord.isPresent()){
+            return userConverter.toDto(keyWord.get());
+        }else {
+            return null;
+        }
+    }
 
 }

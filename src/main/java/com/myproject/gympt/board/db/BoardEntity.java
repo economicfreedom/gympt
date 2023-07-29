@@ -4,6 +4,7 @@ import com.myproject.gympt.reply.db.ReplyEntity;
 import com.myproject.gympt.user.db.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,15 +15,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString
-@Entity(name = "board")
+@Table(name = "board")
+@Entity
 public class BoardEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String nickName;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -39,6 +38,14 @@ public class BoardEntity {
 
     @Column(name = "board_type", nullable = false)
     private String boardType;
-    @OneToMany(mappedBy = "board",cascade = CascadeType.REMOVE)
+
+    @Column(name = "nick_name", nullable = false)
+    private String nickName;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<ReplyEntity> replyList;
+    @Formula("CASE WHEN CHAR_LENGTH(content) > 10 THEN CONCAT(SUBSTRING(content, 1, 10), '...') ELSE content END")
+                private String truncatedContent;
+
+    // Constructors, getters, and setters (omitted for brevity)
 }
