@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #000;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .drop-container {
+            border: 2px dashed #999;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        /* Add a class to show a highlight when hovering over the drop container */
+        .highlight {
+            border-color: #000;
+        }
+
+        /* Hide the default file input button */
+        #fileInput {
+            display: none;
+        }
+
+        .drop-container {
+            /* ... Existing styles ... */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #thumbnail {
+            max-width: 100%;
+            max-height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display: none;
+        }
+
+        img:hover {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            // 수정 버튼이 클릭되면 실행되는 함수
+            $("#post").click(function () {
+                // 수정할 게시물의 데이터를 가져옵니다.
+                const inputData = {
+                    id:$("#boardId").val(),
+                    title: $("#title").val(),
+                    content: $("#content").val(),
+                    boardType: $("#boardType").val(),
+                    // 기타 필요한 데이터들을 추가하세요.
+                };
+
+                // 서버로 수정 요청을 보냅니다.
+                $.ajax({
+                    url: "/graphql",
+                    contentType: "application/json",
+                    type: 'POST',
+                    data: JSON.stringify({
+                        query: `
+        mutation UpdateBoard($input: BoardRequest!) {
+          updateBoard(input: $input)
+        }`,
+                        variables: {
+                            input: inputData,
+                        },
+                    }),
+                    success: function (response) {
+                        console.log(response);
+                        location.href="/detail/"+$("#boardId").val()
+
+                        // 서버로부터 응답을 받았으나 실제 응답 내용은 필요에 따라 다를 수 있습니다.
+                        // 게시물이 성공적으로 수정되었다면 응답이 나올 수도 있고, 나오지 않을 수도 있습니다.
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        // 에러 처리
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>게시글 수정</h1>
+<form action="/create" method="post">
+    <input th:value="${board.getId()}" hidden="hidden" id="boardId">
+    <input th:value="${board.user.getUid()}" hidden="hidden" id="boardTypeId">
+    <label for="title">제목</label>
+    <input th:value="${board.getTitle()}" type="text" id="title" name="title" required>
+
+    <label for="content">내용</label>
+    <textarea th:text="${board.getContent}" id="content" name="content" rows="5" required></textarea>
+
+
+    <label for="boardType">게시판 유형</label>
+    <select id="boardType" name="boardType" required>
+        <option value="문의사항">문의사항</option>
+        <option value="버그제보">버그제보</option>
+        <option value="질문과답변">질문과답변</option>
+    </select>
+    <!--    <div class="drop-container" id="dropContainer">-->
+    <!--        <span class="drop-message">Drag and drop an image here or click to browse</span>-->
+    <!--        <input type="file" id="fileInput" accept="image/*">-->
+    <!--        <img id="thumbnail" src="" alt="Thumbnail">-->
+    <!--    </div>-->
+    <button id="post" type="button">등록</button>
+</form>
+</body>
+</html>

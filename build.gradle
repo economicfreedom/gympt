@@ -41,6 +41,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.1.2'
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+
+    implementation 'org.springframework.boot:spring-boot-starter-graphql'
+//    testImplementation 'org.springframework.graphql:spring-graphql-test'
 }
 
 tasks.named('test') {

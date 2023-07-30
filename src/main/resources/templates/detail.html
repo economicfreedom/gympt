@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log(Number($("#board_id").val()))
+            $.ajax({
+                url: "/graphql", // GraphQL 서버의 엔드포인트 URL을 적어주세요.
+                contentType: "application/json",
+                type: 'POST',
+                // headers: {
+                //     "Authorization": "Bearer your-token" // 만약 필요한 경우, 인증 토큰을 헤더에 추가하세요.
+                // },
+                data: JSON.stringify({
+                    query: `
+      query ($id: ID) {
+        findById(id: $id) {
+          id
+          nickName
+          title
+          content
+          createdAt
+          boardType
+        }
+      }`,
+
+                    variables: {
+                        id: Number($("#board_id").val()), // 여기에 필요한 ID를 넣으세요.
+                    },
+                }),
+                success: function (response) {
+                    console.log(response);
+                    $("#content").text(response.data.findById.content);
+                    $(".post-title").text(response.data.findById.title);
+                    $(".post-author").text("작성자 " + response.data.findById.nickName);
+
+                },
+                error: function (err) {
+                    console.log(err);
+                    // 에러 처리
+                }
+            });
+            $("#delete").click(function () {
+
+                    // 삭제할 게시물의 ID를 가져옵니다.
+                    const idToDelete = Number($("#board_id").val());
+
+                    // 서버로 삭제 요청을 보냅니다.
+                    $.ajax({
+                        url: "/graphql",
+                        contentType: "application/json",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            query: `
+                    mutation ($id: ID!) {
+                        deleteBoard(id: $id)
+                    }`,
+                            variables: {
+                                id: idToDelete,
+                            },
+                        }),
+                        success: function (response) {
+                            console.log(response);
+                            // 서버로부터 응답을 받았으나 실제 응답 내용은 필요에 따라 다를 수 있습니다.
+                            // 게시물이 성공적으로 삭제되었다면 응답이 나올 수도 있고, 나오지 않을 수도 있습니다.
+                        },
+                        error: function (err) {
+                            console.log(err);
+                            // 에러 처리
+                        }
+                    });
+                });
+
+            });
+
+
+
+
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .post-author {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .comment-content {
+            font-size: 16px;
+        }
+
+        /* Comment Form Styles */
+        .comment-form {
+            margin-top: 20px;
+        }
+
+        .comment-form h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .comment-form label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .comment-form input[type="text"],
+        .comment-form textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .comment-form textarea {
+            resize: vertical;
+        }
+
+        .comment-form button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .edit-post-button {
+            background-color: #f0ad4e;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* Edit Form Styles */
+        .edit-form {
+            display: none;
+        }
+
+        .edit-form textarea {
+            width: 100%;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" th:value="${testId}" hidden="hidden" id="board_id">
+<div class="container">
+    <div class="post-title">Sample Post Title</div>
+    <div class="post-author">Posted by John Doe</div>
+    <div class="post-content">
+        <p id="content">
+
+        </p>
+         <a th:href="@{|/modify/${id}|}">
+        <button class="edit-post-button"
+                sec:authorize="isAuthenticated()"
+                th:if="${uid != null and #authentication.getPrincipal().getUsername() == uid}"
+                th:text="수정"
+        >
+
+        </button></a>
+        <button class="edit-post-button"
+                sec:authorize="isAuthenticated()"
+                th:if="${uid != null and #authentication.getPrincipal().getUsername() == uid}"
+                th:text="삭제"
+                id="delete"
+        >삭제
+        </button>
+    </div>
+
+    <
+    <div class="comment">
+        <div class="comment-author">Comment by Jane Doe</div>
+        <div class="comment-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed cursus ante dapibus diam.
+        </div>
+    </div>
+
+    <div class="comment">
+        <div class="comment-author">Comment by Mark Smith</div>
+        <div class="comment-content">
+            Pellentesque ut neque. Ut id nisl quis enim dignissim sagittis. Nullam in orci vel ipsum mollis venenatis.
+        </div>
+    </div>
+
+    <div class="comment-form">
+        <h2>Add a Comment</h2>
+        <form id="commentForm">
+
+
+            <div>
+                <label for="commentContent">Comment:</label>
+                <textarea id="commentContent" rows="4" required></textarea>
+            </div>
+            <button type="submit">Submit Comment</button>
+        </form>
+    </div>
+</div>
+
+
+</body>
+</html>

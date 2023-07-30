@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BoardService {
+public class BoardService  {
     private final BoardRepository boardRepository;
     private final UserConverter userConverter;
     private final UserRepository userRepository;
@@ -42,6 +42,20 @@ public class BoardService {
                 .replyList(null)
                 .build();
         return boardConverter.toDto(boardRepository.save(boardEntity));
+    }
+
+    public BoardDTO modify(BoardRequest boardRequest) {
+
+        Optional<UserEntity> byUid = userRepository.findByUid(boardRequest.getUid());
+
+        Optional<BoardEntity> boardEntity = boardRepository.findById(boardRequest.getId());
+        BoardEntity board = boardEntity.get();
+        board.setContent(boardRequest.getContent());
+        board.setTitle(board.getTitle());
+        board.setBoardType(board.getBoardType());
+        board.setCreatedAt(LocalDateTime.now());
+
+        return boardConverter.toDto(boardRepository.save(board));
     }
 
     public Api<List<BoardEntity>> all(Pageable pageable, String title, String type) {
@@ -68,6 +82,29 @@ public class BoardService {
         return response;
     }
 
+    public BoardDTO getBoard (Long id){
+        Optional<BoardEntity> boardEntity = boardRepository.findById(id);
+        if (boardEntity.isEmpty()){
+            return null;
+        }else {
+
+        BoardDTO dto = boardConverter.toDto(boardEntity.get());
+        return dto;
+        }
+
+    }
+
+//    public BoardDTO getBoard(Long id){
+//        boardRepository.save()
+//        return
+//
+//    }
+    public void deleteBoard(Long id){
+        boardRepository.deleteById(id);
+    }
+    public Long getMaxId(){
+        return boardRepository.maxId();
+    }
 }
 
 

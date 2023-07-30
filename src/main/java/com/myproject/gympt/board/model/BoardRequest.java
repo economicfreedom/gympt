@@ -14,6 +14,7 @@ import lombok.*;
 @ToString
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BoardRequest {
+    private Long id;
     private String uid;
     @NotEmpty(message = "제목은 필수항목입니다.")
     @Size(max = 200)

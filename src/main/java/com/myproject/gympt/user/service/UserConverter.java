@@ -26,12 +26,15 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
                 .nickName(userEntity.getNickName())
                 .simpleAddress(userEntity.getSimpleAddress())
                 .createdAt(userEntity.getCreatedAt())
+                .gptCount(userEntity.getGptCount())
                 .build();
     }
 
     @Override
     public UserEntity toEntity(UserDTO userDTO) {
         Optional<UserEntity> byUid = userRepository.findByUid(userDTO.getUid());
+
+
 
 
         return UserEntity.builder()
@@ -43,6 +46,7 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
                 .nickName(userDTO.getNickName())
                 .simpleAddress(userDTO.getSimpleAddress())
                 .createdAt(byUid.get().getCreatedAt())
+                .gptCount(userDTO.getGptCount())
                 .build();
     }
 }

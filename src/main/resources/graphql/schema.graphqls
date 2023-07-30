@@ -1,0 +1,30 @@
+type Query{
+    findById(id:ID): BoardDTO
+}
+
+type Mutation{
+  deleteBoard(id:ID): Boolean
+  updateBoard(input:BoardRequest):Boolean
+  createBoard(input:BoardRequest):String
+}
+
+
+
+type BoardDTO {
+  id: ID!
+  nickName: String!
+  title: String!
+  content: String!
+  createdAt: String!
+  boardType: String!
+}
+
+
+
+input BoardRequest{
+  id:ID!
+  uid:String
+  title:String!
+  content:String!
+  boardType:String!
+}

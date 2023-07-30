@@ -25,6 +25,7 @@ class GymptApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println(1);
     }
 
     @Test
@@ -85,10 +86,18 @@ class GymptApplicationTests {
         }
 
     }
+
     @Test
-    void userDelete(){
+    void userDelete() {
         userRepository.deleteAll();
     }
 
+    @Test
+    void getMaxId() {
+        System.out.println("실행됨");
+        Long maxId = boardRepository.maxId();
+        System.out.println("실행종료");
+        System.out.println(maxId);
+    }
 
 }

@@ -10,19 +10,20 @@
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
             crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
 
     <script>
-        var keyword = "";
-        var type = "";
+        var keyword = $("#kw").val();
+        var type = $("#board_type").val();
         var count = 0;
         var list;
         var page = 0
         var totalPage;
 
         function getList(kw, ty) {
-
             $.ajax({
-                url: 'http://localhost:8081/all',
+
+                url: '/all',
                 type: 'GET',
                 data: {
                     page: page,
@@ -30,6 +31,8 @@
                     type: ty // 여기에 실제 타입을 입력하세요
                 },
                 success: function (response) {
+
+                    console.log("요청 시작")
                     // 서버로부터 응답을 받았을 때의 처리를 여기에 작성하세요
                     list = response.body;
                     totalPage = response.pagination.totalPage;
@@ -50,47 +53,73 @@
                             '</div>' +
                             '</a>';
                         $('.feed').append(post); // post를 .feed 요소에 추가합니다.
-
                         count = 0
+                        $('#loading').hide();
                     }
+                    console.log("요청 종료")
                 },
                 error: function (error) {
                     // 요청이 실패했을 때의 처리를 여기에 작성하세요
                     console.error(error + "test");
+                    $('#loading').hide();
                 }
             });
         }
 
         $(document).ready(function () {
 
+            let val = $("#kw").val();
 
-            getList()
+
+            if (val === "") {
+                getList()
+
+            }
             console.log("로딩된 후 동작함")
+            $(window).on('scroll', _.throttle(function () {
+                    var scrollHeight = $(document).height(); // Total document height
+                    var scrollPosition = $(window).height() + $(window).scrollTop(); //
+                    // Check if the scrollbar is at the bottom of the page
+
+                    console.log(totalPage + "토탈 페이지")
+                    console.log(page + "지금 페이지")
+                    keyword = $("#kw").val();
+                    type = $("#board_type").val();
+                    if (scrollPosition >= scrollHeight && totalPage !== page) {
+
+                        page++
+                        // Your function or code to be executed when the scrollbar is at the bottom
+
+                        getList(keyword, type)
+
+
+                        // Add your code here.
+                    }
+
+
+                },
+                3000));
             $(window).on('scroll', function () {
-                var scrollHeight = $(document).height(); // Total document height
-                var scrollPosition = $(window).height() + $(window).scrollTop(); // Current scroll position
+                var scrollHeight = $(document).height();
+                var scrollPosition = $(window).height() + $(window).scrollTop();
+
                 // Check if the scrollbar is at the bottom of the page
+                if (scrollPosition >= scrollHeight) {
 
-                console.log(totalPage + "토탈 페이지")
-                console.log(page + "지금 페이지")
-
-                if (scrollPosition >= scrollHeight && totalPage !== page) {
-                    page++
-                    // Your function or code to be executed when the scrollbar is at the bottom
-
-                    getList(keyword, type)
-
-
-                    // Add your code here.
+                    $('#loading').show();
                 }
             });
             var executeLogic = function () {
+                $('.feed').empty();
                 var keyword = $("#kw").val();
                 var type = $("#board_type").val();
                 count = 1;
                 console.log("동작함");
-                $('.feed').empty();
+
+                page = 0
                 getList(keyword, type);
+
+
             };
 
 // '#search' 버튼을 클릭했을 때 함수를 실행합니다.
@@ -179,7 +208,7 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="/bot/gym-pt">GymPT</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -190,10 +219,11 @@
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
+                    <a class="nav-link" href="/user/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+                    <a class="nav-link" href="/user/login" sec:authorize="isAnonymous()">로그인</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="/create" sec:authorize="isAuthenticated()">글 작성</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -208,6 +238,7 @@
                 </li>
             </ul>
         </div>
+
         <select id="board_type" class="form-select custom-select-width" aria-label="Default select example">
             <option selected value="">전체보기</option>
             <option value="버그제보">버그제보</option>
@@ -215,7 +246,8 @@
             <option value="자유">자유</option>
         </select>
         <form class="d-flex">
-            <input id="kw" class="form-control me-2" type="search" placeholder="Search">
+            <input id="kw" class="form-control me-2" type="text" placeholder="Search">
+            <span id="kw2"></span>
             <button class="btn btn-outline-success" id="search" type="button">Search</button>
         </form>
     </div>
@@ -230,6 +262,9 @@
 <div class="feed">
 
 
+</div>
+<div align="center" id="loading" style="display: none;">
+    <img alt="ss" th:src="@{/loading.gif}" style="height: 100px ">
 </div>
 </body>
 </html>

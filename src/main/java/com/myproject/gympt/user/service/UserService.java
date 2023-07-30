@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.zip.DataFormatException;
@@ -39,9 +40,30 @@ public class UserService {
     }
     public UserDTO getUser(String uid) throws DataFormatException {
         Optional<UserEntity> byUid = userRepository.findByUid(uid);
+        if (byUid.isEmpty()){
+            return null;
+        }else {
+            return getUserDTO(byUid);
+        }
 
-        return getUserDTO(byUid);
+
+
+
     }
+    public UserDTO update(Principal principal){
+
+
+        UserEntity userEntity = userRepository.findByUid(principal.getName()).get();
+        byte b = (byte) (userEntity.getGptCount()+1);
+        userEntity.setGptCount(b);
+        userRepository.save(userEntity);
+        UserDTO dto = userConverter.toDto(userEntity);
+        return dto;
+    }
+
+
+
+
 
 
 

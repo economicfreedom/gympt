@@ -1,34 +1,33 @@
 package com.myproject.gympt.gpt.controller;
 
-//import com.theokanning.openai.completion.CompletionRequest;
-//import com.theokanning.openai.service.OpenAiService;
-
-import com.myproject.gympt.gpt.model.ChatGptRequest;
-import com.myproject.gympt.gpt.model.ChatGptResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.myproject.gympt.user.model.UserDTO;
+import com.myproject.gympt.user.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-@RestController
+import java.security.Principal;
+import java.util.zip.DataFormatException;
+
+@Controller
 @RequestMapping("/bot")
+@RequiredArgsConstructor
 public class BotController {
 
-    @Value("${openai.model}")
-    private String model;
+    private final UserService userService;
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/gym-pt")
+    public String view(Principal principal) throws DataFormatException {
 
-    @Value("${openai.api.url}")
-    private String apiURL;
-    @Autowired
-    private RestTemplate template;
+        UserDTO user = userService.getUser(principal.getName());
 
-    @GetMapping("/chat")
-    public String chat(@RequestParam("prompt") String prompt){
-        ChatGptRequest request = new ChatGptRequest(model,prompt);
-        ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
-        return chatGptResponse.getChoices().get(0).getMessage().getContent();
+        if (user.getGptCount() == 2){
+            return "redirect:/main";
+        }
+
+        return "gympt";
     }
+
 }

@@ -38,4 +38,5 @@ public class UserDTO {
 
 
     private String nickName;
+    private byte gptCount;
 }
