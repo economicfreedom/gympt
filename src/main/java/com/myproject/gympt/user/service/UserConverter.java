@@ -16,6 +16,11 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
 
     @Override
     public UserDTO toDto(UserEntity userEntity) {
+        byte b =1;
+        if(userEntity.getGptCount() == null){
+            b=0;
+        }
+
 
         return UserDTO.builder()
                 .id(userEntity.getId())
@@ -26,7 +31,7 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
                 .nickName(userEntity.getNickName())
                 .simpleAddress(userEntity.getSimpleAddress())
                 .createdAt(userEntity.getCreatedAt())
-                .gptCount(userEntity.getGptCount())
+                .gptCount((userEntity.getGptCount()==null)? b:userEntity.getGptCount())
                 .build();
     }
 

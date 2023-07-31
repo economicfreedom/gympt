@@ -34,7 +34,6 @@ import java.util.zip.DataFormatException;
 @Slf4j
 public class BoardController {
 
-    private final UserService userService;
     private final BoardService boardService;
 
 
@@ -130,10 +129,14 @@ public class BoardController {
     @GetMapping("/detail/{id}")
     public String boardPage(@PathVariable Long id, Model model, Principal principal) throws DataFormatException {
         BoardDTO board = boardService.getBoard(id);
+        String user = "unknown";
 
-
+        if (principal != null){
+            user = principal.getName();
+        }
         model.addAttribute("uid", board.getUser().getUid());
         model.addAttribute("testId", id);
+        model.addAttribute("normal",user);
 
         return "detail";
     }

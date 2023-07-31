@@ -1,5 +1,7 @@
 package com.myproject.gympt.board.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.myproject.gympt.reply.db.ReplyEntity;
 import com.myproject.gympt.user.db.UserEntity;
 import jakarta.persistence.*;
@@ -13,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 public class BoardDTO {
 
     private Long id;
@@ -33,6 +35,7 @@ public class BoardDTO {
 
     private String boardType;
 
+    @JsonManagedReference
     private List<ReplyEntity> replyList = List.of();
 
 }

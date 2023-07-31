@@ -55,6 +55,7 @@
                         $('.feed').append(post); // post를 .feed 요소에 추가합니다.
                         count = 0
                         $('#loading').hide();
+
                     }
                     console.log("요청 종료")
                 },
@@ -98,8 +99,9 @@
 
 
                 },
-                3000));
+                0));
             $(window).on('scroll', function () {
+
                 var scrollHeight = $(document).height();
                 var scrollPosition = $(window).height() + $(window).scrollTop();
 
@@ -108,6 +110,11 @@
 
                     $('#loading').show();
                 }
+                    if (totalPage === page) {
+                            console.log("값이 같아짐")
+                            $('#loading').hide();
+
+                        }
             });
             var executeLogic = function () {
                 $('.feed').empty();

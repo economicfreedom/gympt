@@ -1,5 +1,6 @@
 package com.myproject.gympt.gpt.db;
 
+import com.myproject.gympt.board.model.BoardDTO;
 import com.myproject.gympt.user.db.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @Entity(name = "gpt")
 public class GptEntity {
     @Id
@@ -31,4 +31,6 @@ public class GptEntity {
     private LocalDateTime createdAt;
 
     // Constructors, getters, and setters (omitted for brevity)
+
 }
+

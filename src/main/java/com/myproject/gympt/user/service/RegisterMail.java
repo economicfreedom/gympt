@@ -28,7 +28,7 @@ public class RegisterMail {
 		MimeMessage message = emailsender.createMimeMessage();
 
 		message.addRecipients(MimeMessage.RecipientType.TO, to);// 보내는 대상
-		message.setSubject("GoodJob 회원가입 이메일 인증");// 제목
+		message.setSubject("회원님의 건강한 하루를 도와드리기 위한 GymPT입니다");// 제목
 
 		String msgg = "";
 		msgg += "<div style='margin:100px;'>";

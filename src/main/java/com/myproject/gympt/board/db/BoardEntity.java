@@ -1,5 +1,6 @@
 package com.myproject.gympt.board.db;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.myproject.gympt.reply.db.ReplyEntity;
 import com.myproject.gympt.user.db.UserEntity;
 import jakarta.persistence.*;
@@ -43,9 +44,11 @@ public class BoardEntity {
     private String nickName;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+        @JsonManagedReference
+
     private List<ReplyEntity> replyList;
     @Formula("CASE WHEN CHAR_LENGTH(content) > 10 THEN CONCAT(SUBSTRING(content, 1, 10), '...') ELSE content END")
-                private String truncatedContent;
+    private String truncatedContent;
 
     // Constructors, getters, and setters (omitted for brevity)
 }
