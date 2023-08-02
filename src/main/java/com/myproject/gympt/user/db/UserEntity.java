@@ -17,7 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @ToString
-@Entity(name = "user")
+@Table(name = "user")
+@Entity
 
 public class UserEntity {
 
@@ -46,7 +47,7 @@ public class UserEntity {
     @Column(name = "nick_name", nullable = false, unique = true)
     private String nickName;
     @Column(name = "gpt_count")
-    private Byte gptCount;
+    private byte gptCount;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @OrderBy("id desc")

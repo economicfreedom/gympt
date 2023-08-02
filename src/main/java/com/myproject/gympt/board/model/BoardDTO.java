@@ -36,6 +36,7 @@ public class BoardDTO {
     private String boardType;
 
     @JsonManagedReference
+    @Builder.Default
     private List<ReplyEntity> replyList = List.of();
 
 }

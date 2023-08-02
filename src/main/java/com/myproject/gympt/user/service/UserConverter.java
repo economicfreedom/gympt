@@ -26,7 +26,7 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
                 .collect(Collectors.toList());
 
         byte b =1;
-        if(userEntity.getGptCount() == null){
+        if(userEntity.getGptCount() == 0){
             b=0;
         }
 
@@ -40,7 +40,7 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
                 .nickName(userEntity.getNickName())
                 .simpleAddress(userEntity.getSimpleAddress())
                 .createdAt(userEntity.getCreatedAt())
-                .gptCount((userEntity.getGptCount()==null)? b:userEntity.getGptCount())
+                .gptCount((userEntity.getGptCount()==0)? b:userEntity.getGptCount())
                 .status(userEntity.getStatus())
                 .gptList(gptdtoList)
                 .build();

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>게시글 등록</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
+    <script>
         $(document).ready(function () {
 
             // 수정 버튼이 클릭되면 실행되는 함수
             $("#post").click(function () {
                 // 수정할 게시물의 데이터를 가져옵니다.
                 const inputData = {
-                    id:(Number($("#board_max_id").val())+1),
+                    id: (Number($("#board_max_id").val()) + 1),
                     title: $("#title").val(),
                     content: $("#content").val(),
                     boardType: $("#boardType").val(),
@@ -34,7 +34,7 @@
                     success: function (response) {
 
                         alert("글이 등록되었습니다.")
-                        location.href = "/detail/"+(Number($("#board_max_id").val())+1);
+                        location.href = "/detail/" + (Number($("#board_max_id").val()) + 1);
                         // 서버로부터 응답을 받았으나 실제 응답 내용은 필요에 따라 다를 수 있습니다.
                         // 게시물이 성공적으로 수정되었다면 응답이 나올 수도 있고, 나오지 않을 수도 있습니다.
                     },
@@ -44,7 +44,7 @@
                     }
                 });
             });
-            $("#back-btn").click(function (){
+            $("#back-btn").click(function () {
                 history.back()
             })
         });
@@ -146,28 +146,29 @@
 </head>
 <body>
 <h1>게시글 등록</h1>
-    <input th:value="${maxId}" hidden="hidden" id="board_max_id" >
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" required>
+<input th:value="${maxId}" hidden="hidden" id="board_max_id">
+<label for="title">제목</label>
+<input type="text" id="title" name="title" required>
 
-    <label for="content">내용</label>
-    <textarea id="content" name="content" rows="5" required></textarea>
+<label for="content">내용</label>
+<textarea id="content" name="content" rows="5" required></textarea>
 
 
-
-    <label for="boardType">게시판 유형</label>
-    <select id="boardType" name="boardType" required>
-        <option value="문의사항">문의사항</option>
-        <option value="버그제보">버그제보</option>
-        <option value="질문과답변">질문과답변</option>
-    </select>
-    <!--    <div class="drop-container" id="dropContainer">-->
-    <!--        <span class="drop-message">Drag and drop an image here or click to browse</span>-->
-    <!--        <input type="file" id="fileInput" accept="image/*">-->
-    <!--        <img id="thumbnail" src="" alt="Thumbnail">-->
-    <!--    </div>-->
-    <button type="button" id="post">등록</button>
-    <button type="button" id="back-btn">등록</button>
+<label for="boardType">게시판 유형</label>
+<select id="boardType" name="boardType" required>
+    <option value="문의사항">문의사항</option>
+    <option value="버그제보">버그제보</option>
+    <option value="질문과답변">질문과답변</option>
+</select>
+<!--    <div class="drop-container" id="dropContainer">-->
+<!--        <span class="drop-message">Drag and drop an image here or click to browse</span>-->
+<!--        <input type="file" id="fileInput" accept="image/*">-->
+<!--        <img id="thumbnail" src="" alt="Thumbnail">-->
+<!--    </div>-->
+<button type="button" id="post">등록</button>
+<br>
+<br>
+<button type="button" id="back-btn">뒤로가기</button>
 
 <script>
     // Add the JavaScript code here to handle the drag and drop functionality

@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.graphql-java:graphql-java-extended-scalars:20.2'
 //    testImplementation 'org.springframework.graphql:spring-graphql-test'
     implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
 }
 
 tasks.named('test') {

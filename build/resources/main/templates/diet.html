@@ -82,24 +82,31 @@
                 let gender = $("#gender").val();
                 let age = $("#age").val();
                 let purpose = $("#purpose").val();
-                let discomfort =$("#discomfort").val()
-                if (discomfort === "없음"  || discomfort==="") {
+                let discomfort = $("#discomfort").val()
+                if (discomfort === "없음" || discomfort === "") {
                     discomfort = "없습니다.";
                 } else {
                     discomfort = discomfort + "입니다.";
                 }
-
+                if (age == null || age == "") {
+                    $("#age").focus()
+                    return;
+                }
+                if (discomfort === null || age == "") {
+                    $("#discomfort").focus();
+                    return;
+                }
 
                 $.ajax({
                     url: `/bot/chat`,
                     type: 'POST',
-                    contentType:"application/json",
+                    contentType: "application/json",
                     data: JSON.stringify({
-                        type:$("#type").val(),
+                        type: $("#type").val(),
                         gender: gender,
-                        discomfort:discomfort,
-                        purpose:purpose,
-                        age:age
+                        discomfort: discomfort,
+                        purpose: purpose,
+                        age: age
 
                     }),
                     beforeSend: function () {
@@ -111,7 +118,7 @@
                         console.log(text);
                         $("#loading").hide();
                         alert("답장이 왔어요 내 정보에서 확인해주세요!");
-                                                location.href="/user/show-answer";
+                        location.href = "/user/show-answer";
 
                     },
                     error: function () {
@@ -119,6 +126,9 @@
                     }
                 });
             });
+            $("#back").click(function () {
+                history.back()
+            })
         });
     </script>
 
@@ -127,6 +137,7 @@
 <body>
 
 <div id="test">
+    <button id="back">< < <</button>
     <label for="gender">성별:</label>
     <select name="gender" id="gender">
         <option value="male">남성</option>
@@ -147,11 +158,11 @@
         <option value="건강증진">건강증진</option>
     </select>
 
-<button id="go">제출</button>
+    <button id="go">제출</button>
 </div>
 <div hidden="hidden" align="center" id="loading" style="display: none;">
-        <img alt="ss" th:src="@{/gympt.png}" style="height: auto ;width: auto ">
-    </div>
+    <img alt="ss" th:src="@{/gympt.png}" style="height: auto ;width: auto ">
+</div>
 <input type="hidden" value="다이어트" id="type">
 </body>
 </html>

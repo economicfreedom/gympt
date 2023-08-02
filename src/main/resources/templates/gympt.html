@@ -89,7 +89,14 @@
                 } else {
                     discomfort = discomfort + "입니다.";
                 }
-
+                if (age == null || age ==""){
+                    $("#age").focus()
+                    return;
+                }
+                if (discomfort ===null || age ==""){
+                    $("#discomfort").focus();
+                    return;
+                }
                 var prompt = " 질문 :  [저는 " + age + "살" +
                     " " + gender + "이고 " +
                     "운동에 불편한 곳은 " + discomfort +
@@ -124,13 +131,17 @@
                     }
                 });
             });
+            $("#back").click(function (){
+                history.back()
+
+            })
         });
     </script>
 
 
 </head>
 <body>
-
+<button id="back">< < <</button>
 <div id="test">
     <label for="gender">성별:</label>
     <select name="gender" id="gender">
@@ -155,7 +166,7 @@
 <button id="go">제출</button>
 </div>
 <div hidden="hidden" align="center" id="loading" style="display: none;">
-        <img alt="ss" th:src="@{/gympt.png}" style="height: auto ;width: auto ">
+        <img alt="ss" th:src="@{/gympt.png}"  style="height: auto ;width: auto ">
     </div>
 <input type="hidden" value="운동" id="type">
 </body>

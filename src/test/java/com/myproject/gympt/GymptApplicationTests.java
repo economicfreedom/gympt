@@ -32,6 +32,9 @@ class GymptApplicationTests {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserUpdateCount userUpdateCount;
+
     @Test
     void contextLoads() {
         System.out.println(1);
@@ -133,7 +136,7 @@ class GymptApplicationTests {
 
     }
     @Test void updateGPTCount(){
-        Optional<UserEntity> user = userRepository.findByUid("zxcv12343");
+        Optional<UserEntity> user = userRepository.findByUid("dpfoqm12");
         UserEntity userEntity = user.get();
         userEntity.setGptCount((byte) 0);
         userRepository.save(userEntity);
@@ -178,5 +181,8 @@ class GymptApplicationTests {
 
         userRepository.save(userEntity);
     }
-
+    @Test
+    void 모든유저지피티사용횟수0으로초기화(){
+        userUpdateCount.userGptCountUpdate();
+    }
 }

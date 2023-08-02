@@ -1,5 +1,6 @@
 type Query{
     findById(id:ID): BoardDTO
+    graphQlTest(id:ID):BoardDTO
 }
 
 type Mutation{
@@ -23,6 +24,12 @@ type BoardDTO {
     replyList:[ReplyDTO]
 }
 
+type GraphQLTestDTO{
+    title:String
+    name:String
+    content:String
+    testData1:String
+}
 
 
 
