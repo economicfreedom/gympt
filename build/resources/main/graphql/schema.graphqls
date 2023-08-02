@@ -1,0 +1,57 @@
+type Query{
+    findById(id:ID): BoardDTO
+}
+
+type Mutation{
+    deleteBoard(id:ID): Boolean
+    updateBoard(input:BoardRequest):Boolean
+    createBoard(input:BoardRequest):String
+    addReply(input:ReplyRequest):ReplyDTO
+    updateReply(input:ReplyRequest):Boolean
+    deleteReply(input:ReplyRequest):Boolean
+}
+
+
+
+type BoardDTO {
+    id: ID!
+    nickName: String!
+    title: String!
+    content: String!
+    createdAt: String!
+    boardType: String!
+    replyList:[ReplyDTO]
+}
+
+
+
+
+
+type ReplyDTO{
+    id : Long
+    user : UserEntity
+    content : String
+    board : Long
+}
+type UserEntity{
+    uid:String
+    nickName:String
+
+}
+
+
+input BoardRequest{
+    id:ID!
+    uid:String
+    title:String!
+    content:String!
+    boardType:String!
+}
+
+input ReplyRequest{
+    boardId:ID!
+    id:Long
+    content:String
+
+}
+scalar Long

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        input[type="number"]::placeholder,
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        button {
+            background-color: black;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#go").click(function (e) {
+
+                e.preventDefault();
+                $('#loadingOverlay').fadeIn();
+
+                let gender = $("#gender").val();
+                let age = $("#age").val();
+                let purpose = $("#purpose").val();
+                let discomfort =$("#discomfort").val()
+                if (discomfort === "없음"  || discomfort==="") {
+                    discomfort = "없습니다.";
+                } else {
+                    discomfort = discomfort + "입니다.";
+                }
+
+
+                $.ajax({
+                    url: `/bot/chat`,
+                    type: 'POST',
+                    contentType:"application/json",
+                    data: JSON.stringify({
+                        type:$("#type").val(),
+                        gender: gender,
+                        discomfort:discomfort,
+                        purpose:purpose,
+                        age:age
+
+                    }),
+                    beforeSend: function () {
+                        $("#test").empty()
+                        $("#loading").show();
+                        alert("요청 되셨습니다 잠시만 기다려주세요.")
+                    },
+                    success: function (text) {
+                        console.log(text);
+                        $("#loading").hide();
+                        alert("답장이 왔어요 내 정보에서 확인해주세요!");
+                                                location.href="/user/show-answer";
+
+                    },
+                    error: function () {
+                        alert("뭔가 잘못되었나봐요 나중에 다시 시도해주세요...");
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</head>
+<body>
+
+<div id="test">
+    <label for="gender">성별:</label>
+    <select name="gender" id="gender">
+        <option value="male">남성</option>
+        <option value="female">여성</option>
+    </select>
+
+    <label for="age">나이:</label>
+    <input type="number" name="age" id="age" required max="130" min="0">
+
+    <label for="discomfort">알러지를 입력해주세요:</label>
+    <small>없으시면 "없음"을 입력해주세요</small>
+    <input type="text" name="discomfort" id="discomfort">
+
+    <label for="purpose">식단 목적:</label>
+    <select name="purpose" id="purpose">
+        <option value="근육증가">체중증량</option>
+        <option value="체중감량">체중감량</option>
+        <option value="건강증진">건강증진</option>
+    </select>
+
+<button id="go">제출</button>
+</div>
+<div hidden="hidden" align="center" id="loading" style="display: none;">
+        <img alt="ss" th:src="@{/gympt.png}" style="height: auto ;width: auto ">
+    </div>
+<input type="hidden" value="다이어트" id="type">
+</body>
+</html>

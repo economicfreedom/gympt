@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+
+
+            $.ajax({
+                url: "/graphql", // GraphQL 서버의 엔드포인트 URL을 적어주세요.
+                contentType: "application/json",
+                type: 'POST',
+                // headers: {
+                //     "Authorization": "Bearer your-token" // 만약 필요한 경우, 인증 토큰을 헤더에 추가하세요.
+                // },
+                data: JSON.stringify({
+                    query: `
+      query ($id: ID) {
+        findById(id: $id) {
+          id
+          nickName
+          title
+          content
+          createdAt
+          boardType
+         replyList{
+         id
+         content
+         user{
+         uid
+         nickName
+         }
+         }
+        }
+      }`,
+
+                    variables: {
+                        id: Number($("#board_id").val()), // 여기에 필요한 ID를 넣으세요.
+                    },
+                }),
+                success: function (response) {
+
+                    $("#content").text(response.data.findById.content);
+                    $(".post-title").text("제목 : " + "[" + response.data.findById.boardType + "]" + response.data.findById.title);
+                    $(".post-author").text("작성자 : " + response.data.findById.nickName);
+                    var list = response.data.findById.replyList;
+                    let loggedInUser = $('#loggedInUser').val();
+                    if (list.length > 0) {
+                        $(".delete-button").show()
+                        $(".edit-button").show()
+                    }
+
+                    for (let i = 0; i < list.length; i++) {
+
+
+                        let uid = list[i].user.uid;
+                        let reply = '<div class="test">' +
+                            '<div class="comment-author">' + list[i].user.nickName + '</div>' +
+                            '<div class="comment-content" data-id="' + list[i].id + '">' + list[i].content + '</div>';
+                        if (uid === $("#normal").val())
+                            reply += '<button class="edit-button">수정</button>'
+                                + '<button class="delete-button" >삭제</button>'
+
+
+                        reply += '</div>';
+
+                        $('.comments-list').append(reply);
+
+
+                    }
+                    // console.log(response.data.findById.replyList.content)
+                    // console.log(response.data.findById.replyList.user.nickName)/
+                    if (list.length === 0) {
+
+                    }
+                },
+                error: function (err) {
+
+                    // 에러 처리
+                }
+            });
+            $("#delete").click(function () {
+
+                // 삭제할 게시물의 ID를 가져옵니다.
+                const idToDelete = Number($("#board_id").val());
+                if (!confirm("정말로 삭제하시겠습니까?")){
+                    return
+                }
+                // 서버로 삭제 요청을 보냅니다.
+                $.ajax({
+                    url: "/graphql",
+                    contentType: "application/json",
+                    type: 'POST',
+                    data: JSON.stringify({
+                        query: `
+                    mutation ($id: ID!) {
+                        deleteBoard(id: $id)
+                    }`,
+                        variables: {
+                            id: idToDelete,
+                        },
+                    }),
+                    success: function (response) {
+
+                        location.href="/main"
+                    },
+                    error: function (err) {
+
+
+                    }
+                });
+            });
+
+
+            $("#add-reply").click(function () {
+                const board_id_val = $("#board_id").val();
+                const board_id = Number(board_id_val);
+
+
+
+
+                const commentContent = $("#commentContent").val();
+                if (commentContent === "") {
+                    alert("내용을 입력해주세요.")
+                    $("#commentContent").focus()
+                    return;
+                }
+                let input_data = {
+                    boardId: board_id,
+                    content: commentContent,
+                }
+
+
+                $.ajax({
+                    url: "/graphql",
+                    contentType: "application/json",
+                    type: 'POST',
+                    data: JSON.stringify({
+                        query: `mutation AddReply($input: ReplyRequest!) {
+    addReply(input: $input) {
+        id
+        content
+        user{
+            uid
+            nickName
+        }
+    }
+}`,
+                        variables: {
+                            input: input_data
+
+                        },
+                    }),
+                    success: function (response) {
+
+                        // console.log(response);
+                        alert("글이 등록되었습니다.")
+                        location.reload()
+                        // let reply = '<div class="test">' +
+                        //     '<div class="comment-author">' + response.data.addReply.user + '</div>' +
+                        //     '<div class="comment-content" data-id="' + response.data.addReply.id + '">' + response.data.addReply.content + '</div>';
+                        // if (response.data.addReply.user.uid === $("#normal").val())
+                        //     reply += '<button class="edit-button">수정</button>'
+                        //         + '<button class="delete-button" >삭제</button>'
+                        //
+                        //
+                        // reply += '</div>';
+                        //
+                        // $('.comments-list').append(reply);
+
+                    },
+                    error: function (err) {
+
+                        // 에러 처리
+                    }
+                });
+
+
+            });
+            $('#back-button').click(function () {
+                window.history.back();
+            });
+            $(document).on('click', '.edit-button', function () {
+                // 해당 버튼에 가장 가까운 comment-content 클래스를 찾음
+
+                let commentId = $(this).closest('.test').find('.comment-content').data('id');
+                let commentContent = $(this).closest('.test').find('.comment-content').text();
+
+                let textareaElement = $('<textarea/>', {
+                    class: 'edit-textarea',
+                    text: commentContent,  // Use the current comment text as the initial value
+                }).attr('data-id', commentId);
+
+                // Replace the comment content with the new textarea element
+                $(this).closest('.test').find('.comment-content').replaceWith(textareaElement);
+
+                $(this).removeClass('edit-button').addClass('update-button');
+
+
+            });
+
+            $(document).on('click', '.delete-button', function () {
+                let parent = $(this).parent('.test');
+                let commentId = $(this).closest('.test').find('.comment-content').data('id');
+                let boardId = $("#board_id").val()
+
+                let input_data = {
+                    boardId: boardId,
+                    id: commentId,
+                }
+
+                if (confirm('정말로 삭제하시겠습니까?')) {
+                    $.ajax({
+                        url: "/graphql",
+                        contentType: "application/json",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            query: `mutation DeleteReply($input: ReplyRequest!) {
+            deleteReply(input: $input)
+        }`,
+                            variables: {
+                                input: input_data
+
+                            },
+                        }),
+                        success: function (response) {
+                            if (response.data.deleteReply === true) {
+                                parent.remove();
+
+
+                            }
+
+
+                        },
+                        error: function (response) {
+
+                        }
+
+                    })
+                }
+            })
+
+
+            $(document).on('click', '.update-button', function () {
+                let thisButton = $(this);  // thisButton이 클릭된 버튼을 참조하게 함
+
+                let commentId = $(this).closest('.test').find('.edit-textarea').data('id');
+                let commentContent = $(this).closest('.test').find('.edit-textarea').val();
+
+
+                let boardId = $("#board_id").val();
+                var inputData = {
+                    boardId: boardId,
+                    id: commentId,
+                    content: commentContent,
+                }
+                $.ajax({
+                    url: "/graphql",
+                    contentType: "application/json",
+                    type: "POST",
+                    data: JSON.stringify({
+                        query: `mutation UpdateReply($input: ReplyRequest!){
+            updateReply(input: $input)
+
+
+            }`,
+                        variables: {
+                            input: inputData
+                        },
+
+                    }),
+                    success: function (response) {
+                        if (response === true) {
+
+
+                            // Here, revert the textarea back to div, and the button back to edit-button
+                            let commentElement = thisButton.closest('.test').find('.edit-textarea');
+                            commentElement.replaceWith('<div class="comment-content" data-id="' + commentId + '">' + commentContent + '</div>');
+                            thisButton.text('수정').removeClass('update-button').addClass('edit-button');
+
+
+                        }
+                    },
+                    error: function (response) {
+
+                    }
+
+                });
+
+            });
+
+        });
+
+
+    </script>
+    <style>
+        .outer-container {
+            border: 1px solid #000; /* This adds a black border around the container */
+            padding: 20px; /* This adds some space between the border and the content */
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+
+        .post-title {
+            font-size: 2em;
+            color: #000; /* Black */
+            margin-bottom: 10px;
+        }
+
+        .post-author {
+            font-size: 1em;
+            color: #555; /* Dark Gray */
+            margin-bottom: 20px;
+        }
+
+        .post-content {
+            font-size: 1.2em;
+            color: #000; /* Black */
+            margin-bottom: 30px;
+        }
+
+        .edit-post-button {
+            background-color: #000; /* Black */
+            color: #FFF; /* White */
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .comments-container {
+            margin-top: 30px;
+        }
+
+        .comments-container h2 {
+            font-size: 1.5em;
+            color: #000; /* Black */
+            margin-bottom: 20px;
+        }
+
+        .comments-list {
+            margin-bottom: 30px;
+        }
+
+        .test {
+            background-color: #EEE; /* Light Gray */
+            border: 1px solid #CCC; /* Darker Gray */
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #000; /* Black */
+        }
+
+        .comment-content {
+            margin-top: 5px;
+            color: #555; /* Dark Gray */
+        }
+
+        .comment-form {
+            margin-bottom: 50px;
+        }
+
+        .comment-form h2 {
+            font-size: 1.5em;
+            color: #000; /* Black */
+            margin-bottom: 20px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #CCC; /* Dark Gray */
+            box-sizing: border-box;
+        }
+
+        #add-reply {
+            background-color: #000; /* Black */
+            color: #FFF; /* White */
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #add-reply:hover {
+            opacity: 0.8;
+        }
+
+        nav {
+            background-color: #f8f8f8; /* Light Gray */
+            padding: 10px;
+        }
+
+        #back-button {
+            background-color: #000; /* Black */
+            color: #FFF; /* White */
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #back-button:hover {
+            background-color: #555; /* Dark Gray */
+        }
+
+        .edit-button, .delete-button {
+            background-color: #000; /* Black */
+            color: #FFF; /* White */
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .edit-button:hover, .delete-button:hover {
+            background-color: #555; /* Dark Gray */
+        }
+
+        .edit-textarea {
+            width: 90%;
+            height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none; /* disable resizing */
+            font-size: 1em;
+        }
+
+        .update-button {
+            background-color: #000; /* Black */
+            color: #FFF; /* White */
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .update-button:hover {
+            background-color: #555; /* Dark Gray */
+        }
+
+
+    </style>
+</head>
+<body>
+
+<input type="hidden" th:value="${testId}" hidden="hidden" id="board_id">
+<input type="hidden" th:value="${normal}" hidden="hidden" id="normal">
+<!--<input type="hidden" id="loggedInUser" th:value="${#authentication.getPrincipal() != null ? #authentication.getPrincipal().username : ''}">-->
+
+
+<div class="outer-container">
+    <nav>
+        <button id="back-button"><<<</button>
+    </nav>
+    <div class="container">
+        <div class="post-title">Sample Post Title</div>
+        <div class="post-author">Posted by John Doe</div>
+        <div class="post-content">
+            <p id="content">
+
+            </p>
+            <a th:href="@{|/modify/${id}|}">
+                <button class="edit-post-button"
+                        sec:authorize="isAuthenticated()"
+                        th:if="${uid != null and #authentication.getPrincipal().getUsername() == uid}"
+                        th:text="수정">
+
+                </button>
+            </a>
+            <button class="edit-post-button"
+                    sec:authorize="isAuthenticated()"
+                    th:if="${uid != null and #authentication.getPrincipal().getUsername() == uid}"
+                    th:text="삭제"
+                    id="delete"
+            >삭제
+            </button>
+        </div>
+        <hr>
+        <div class="container">
+            <h3>댓글</h3>
+            <div class="comments-list">
+                <!-- Comments will be appended here -->
+
+            </div>
+        </div>
+        <hr>
+        <th:block sec:authorize="isAuthenticated()"
+                  th:if="${uid != null and #authentication.getPrincipal().getUsername() == uid}">
+        <div class="comment-form">
+            <h2>댓글 작성</h2>
+            <div>
+                <label for="commentContent">댓글:</label>
+                <textarea id="commentContent" rows="4" required></textarea>
+            </div>
+            <button id="add-reply" type="button">댓글 등록</button>
+        </div>
+    </div>
+</div>
+</th:block>
+</body>
+</html>

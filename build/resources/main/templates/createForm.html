@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시글 등록</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+        $(document).ready(function () {
+
+            // 수정 버튼이 클릭되면 실행되는 함수
+            $("#post").click(function () {
+                // 수정할 게시물의 데이터를 가져옵니다.
+                const inputData = {
+                    id:(Number($("#board_max_id").val())+1),
+                    title: $("#title").val(),
+                    content: $("#content").val(),
+                    boardType: $("#boardType").val(),
+                    // 기타 필요한 데이터들을 추가하세요.
+                };
+
+                // 서버로 수정 요청을 보냅니다.
+                $.ajax({
+                    url: "/graphql",
+                    contentType: "application/json",
+                    type: 'POST',
+                    data: JSON.stringify({
+                        query: `
+        mutation CreateBoard($input: BoardRequest!) {
+          createBoard(input: $input)
+        }`,
+                        variables: {
+                            input: inputData,
+                        },
+                    }),
+                    success: function (response) {
+
+                        alert("글이 등록되었습니다.")
+                        location.href = "/detail/"+(Number($("#board_max_id").val())+1);
+                        // 서버로부터 응답을 받았으나 실제 응답 내용은 필요에 따라 다를 수 있습니다.
+                        // 게시물이 성공적으로 수정되었다면 응답이 나올 수도 있고, 나오지 않을 수도 있습니다.
+                    },
+                    error: function (err) {
+
+                        // 에러 처리
+                    }
+                });
+            });
+            $("#back-btn").click(function (){
+                history.back()
+            })
+        });
+    </script>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #000;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+        .drop-container {
+            border: 2px dashed #999;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        /* Add a class to show a highlight when hovering over the drop container */
+        .highlight {
+            border-color: #000;
+        }
+
+        /* Hide the default file input button */
+        #fileInput {
+            display: none;
+        }
+
+        .drop-container {
+            /* ... Existing styles ... */
+            position: relative;
+            overflow: hidden;
+        }
+
+        #thumbnail {
+            max-width: 100%;
+            max-height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            display: none;
+        }
+
+        img:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>게시글 등록</h1>
+    <input th:value="${maxId}" hidden="hidden" id="board_max_id" >
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="content">내용</label>
+    <textarea id="content" name="content" rows="5" required></textarea>
+
+
+
+    <label for="boardType">게시판 유형</label>
+    <select id="boardType" name="boardType" required>
+        <option value="문의사항">문의사항</option>
+        <option value="버그제보">버그제보</option>
+        <option value="질문과답변">질문과답변</option>
+    </select>
+    <!--    <div class="drop-container" id="dropContainer">-->
+    <!--        <span class="drop-message">Drag and drop an image here or click to browse</span>-->
+    <!--        <input type="file" id="fileInput" accept="image/*">-->
+    <!--        <img id="thumbnail" src="" alt="Thumbnail">-->
+    <!--    </div>-->
+    <button type="button" id="post">등록</button>
+    <button type="button" id="back-btn">등록</button>
+
+<script>
+    // Add the JavaScript code here to handle the drag and drop functionality
+    // const dropContainer = document.getElementById('dropContainer');
+    // const fileInput = document.getElementById('fileInput');
+    //
+    // dropContainer.addEventListener('dragover', (e) => {
+    //     e.preventDefault();
+    //     dropContainer.classList.add('highlight');
+    // });
+    //
+    // dropContainer.addEventListener('dragleave', () => {
+    //     dropContainer.classList.remove('highlight');
+    // });
+    //
+    // dropContainer.addEventListener('drop', (e) => {
+    //     e.preventDefault();
+    //     dropContainer.classList.remove('highlight');
+    //
+    //     const file = e.dataTransfer.files[0];
+    //     handleFile(file);
+    // });
+    //
+    // fileInput.addEventListener('change', () => {
+    //     const file = fileInput.files[0];
+    //     handleFile(file);
+    // });
+    //
+    // function handleFile(file) {
+    //     if (file && file.type.startsWith('image/')) {
+    //         const reader = new FileReader();
+    //
+    //         reader.onload = function () {
+    //             // Store the file data as a base64-encoded string in a hidden input field
+    //             const imageData = reader.result;
+    //             const hiddenInput = document.createElement('input');
+    //             hiddenInput.type = 'hidden';
+    //             hiddenInput.name = 'imageData';
+    //             hiddenInput.value = imageData;
+    //             document.getElementById('postForm').appendChild(hiddenInput);
+    //
+    //             // Display the image preview
+    //             const img = new Image();
+    //             img.src = imageData;
+    //             img.onload = function () {
+    //                 dropContainer.innerHTML = '';
+    //                 dropContainer.appendChild(img);
+    //             };
+    //         };
+    //
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         alert('Please select a valid image file.');
+    //     }
+    // }
+    //
+    // const thumbnail = document.getElementById('thumbnail');
+    //
+    // function handleFile(file) {
+    //     if (file && file.type.startsWith('image/')) {
+    //         const reader = new FileReader();
+    //
+    //         reader.onload = function () {
+    //             const imageData = reader.result;
+    //
+    //             // Show the thumbnail
+    //             thumbnail.src = imageData;
+    //             thumbnail.style.display = 'block';
+    //
+    //             // Store the file data as a base64-encoded string in a hidden input field
+    //             const hiddenInput = document.createElement('input');
+    //             hiddenInput.type = 'hidden';
+    //             hiddenInput.name = 'imageData';
+    //             hiddenInput.value = imageData;
+    //             document.getElementById('postForm').appendChild(hiddenInput);
+    //         };
+    //
+    //         reader.readAsDataURL(file);
+    //     } else {
+    //         alert('Please select a valid image file.');
+    //     }
+    // }
+    //
+    // // Add a click event to the thumbnail to remove the uploaded image
+    // thumbnail.addEventListener('click', () => {
+    //     thumbnail.src = '';
+    //     thumbnail.style.display = 'none';
+    //     document.querySelector('input[name="imageData"]').remove();
+    // });
+</script>
+</body>
+</html>
