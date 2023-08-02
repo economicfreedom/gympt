@@ -26,17 +26,27 @@ public class ReplyController {
     @PreAuthorize("isAuthenticated()")
     @MutationMapping
     public ReplyDTO addReply(@Argument(name = "input")ReplyRequest replyRequest, Principal principal) throws DataFormatException {
-        log.info("reply request === > {} ",replyRequest);
+        log.info("addReply reply request === > {} ",replyRequest);
         System.out.println("addReply 요청 들어옴");
         ReplyDTO replyDTO = replyService.create(replyRequest, principal);
-
+        log.info("replyDTO {}" ,replyDTO.getUserEntity().toString());
         return replyDTO;
     }
 
-    public void dasf(){
-        BoardEntity.builder()
-                .replyList(null)
-                .build();
+    @PreAuthorize("isAuthenticated()")
+    @MutationMapping
+    public Boolean updateReply(@Argument(name = "input")ReplyRequest replyRequest){
 
+        log.info("updateReply reply request === > {} ",replyRequest);
+        Boolean update = replyService.update(replyRequest);
+
+        return update;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @MutationMapping
+    public Boolean deleteReply(@Argument(name = "input")ReplyRequest replyRequest){
+        log.info("deleteReply reply request === > {} ",replyRequest);
+        return  replyService.delete(replyRequest);
     }
 }

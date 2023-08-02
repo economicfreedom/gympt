@@ -81,20 +81,14 @@
 
                 let gender = $("#gender").val();
                 let age = $("#age").val();
-                let discomfort = $("#discomfort").val();
                 let purpose = $("#purpose").val();
-
+                let discomfort =$("#discomfort").val()
                 if (discomfort === "없음"  || discomfort==="") {
                     discomfort = "없습니다.";
                 } else {
                     discomfort = discomfort + "입니다.";
                 }
 
-                var prompt = " 질문 :  [저는 " + age + "살" +
-                    " " + gender + "이고 " +
-                    "운동에 불편한 곳은 " + discomfort +
-                    " 저의  운동 목적은 " + purpose +
-                    "입니다 3일치 운동 루틴을 알려주세요 다른 문장은 작성하지 마시고 운동루틴만 작성해서 보내주세요]";
 
                 $.ajax({
                     url: `/bot/chat`,
@@ -114,10 +108,11 @@
                         alert("요청 되셨습니다 잠시만 기다려주세요.")
                     },
                     success: function (text) {
-
+                        console.log(text);
                         $("#loading").hide();
-                        location.href="/user/show-answer";
                         alert("답장이 왔어요 내 정보에서 확인해주세요!");
+                                                location.href="/user/show-answer";
+
                     },
                     error: function () {
                         alert("뭔가 잘못되었나봐요 나중에 다시 시도해주세요...");
@@ -141,13 +136,13 @@
     <label for="age">나이:</label>
     <input type="number" name="age" id="age" required max="130" min="0">
 
-    <label for="discomfort">신체적으로 불편한 곳:</label>
+    <label for="discomfort">알러지를 입력해주세요:</label>
     <small>없으시면 "없음"을 입력해주세요</small>
     <input type="text" name="discomfort" id="discomfort">
 
-    <label for="purpose">운동의 목적:</label>
+    <label for="purpose">식단 목적:</label>
     <select name="purpose" id="purpose">
-        <option value="근육증가">근육증가</option>
+        <option value="근육증가">체중증량</option>
         <option value="체중감량">체중감량</option>
         <option value="건강증진">건강증진</option>
     </select>
@@ -157,6 +152,6 @@
 <div hidden="hidden" align="center" id="loading" style="display: none;">
         <img alt="ss" th:src="@{/gympt.png}" style="height: auto ;width: auto ">
     </div>
-<input type="hidden" value="운동" id="type">
+<input type="hidden" value="다이어트" id="type">
 </body>
 </html>

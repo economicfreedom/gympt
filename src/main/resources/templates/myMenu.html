@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Information</title>
+
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .info-item span {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .update-password {
+        margin-top: 20px;
+    }
+
+    .update-password label {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .update-password input {
+        width: 100%;
+        padding: 5px;
+        font-size: 16px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .modify-btn,
+    .back-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .modify-btn:hover,
+    .back-btn:hover {
+        background-color: #444;
+    }
+
+    @media (max-width: 768px) {
+        .info-item {
+            flex-direction: column;
+        }
+
+        .info-item span {
+            margin-bottom: 5px;
+        }
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".back-btn").click(function (){
+            history.back();
+        })
+        $(".modify-btn").click(function () {
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
+            var password = $("input[name='new-password']").val();
+            var password2 = $("input[name='new-password2']").val();
+
+            if (password === null){
+                alert("비밀번호를 입력해주세요")
+                $("#new-#password1").focus()
+                return;
+            }
+            if (password2=== null){
+                alert("비밀번호를 입력해주세요")
+                $("#new-#password2").focus()
+            }
+            if (!passwordRegex.test(password)) {
+                alert("비밀번호는 대문자와 소문를 포함한 8글자에서 16글자여야 합니다.");
+                $("#new-#password1").focus()
+                return
+
+            }
+            if (password !== password2) {
+                alert("비밀번호가 서로 다릅니다")
+                $("#new-#password1").focus()
+                return;
+            }
+
+            var data = {
+                password : password,
+                password2 : password2
+            }
+
+            $.ajax( {
+                url:"/user/update",
+                type:"POST",
+
+                data:data,
+                success:function (){
+                    alert("저장되었습니다.")
+                    window.location.href="/main"
+                },
+                error:function (){
+                    alert("다시 입력해주세요")
+                    location.reload()
+                }
+            })
+
+        })
+    })
+
+</script>
+<body>
+<div class="container">
+    <h1>내 정보</h1>
+    <div class="info-item">
+        <span>이름:</span>
+        <span th:text="${user.getName()}">이름</span>
+    </div>
+    <div class="info-item">
+        <span>닉네임:</span>
+        <span th:text="${user.getNickName()}">닉네임</span>
+    </div>
+    <div class="info-item">
+        <span>거주지:</span>
+        <span th:text="${user.getSimpleAddress()}">거주지</span>
+    </div>
+    <!--        <div class="info-item">-->
+    <!--            <span>Phone Number:</span>-->
+    <!--            <span>Your Phone Number</span>-->
+    <!--        </div>-->
+    <div class="info-item">
+        <span>이메일:</span>
+        <span th:text="${user.getEmail()}">이메일</span>
+    </div>
+    <div class="info-item">
+        <span>사용 가능 횟수:</span>
+        <span th:text="${gptCount}+'회 남음'"></span>
+    </div>
+
+    <div class="update-password">
+        <label for="new-password">새로운 비밀번호:</label>
+        <input type="password" id="new-password" name="new-password">
+        <label for="new-password2">비밀번호 재확인:</label>
+        <input type="password" id="new-password2" name="new-password2">
+    </div>
+    <div class="buttons">
+        <button class="back-btn">뒤로가기</button>
+
+        <button class="modify-btn">수정</button>
+    </div>
+
+</div>
+</body>
+</html>

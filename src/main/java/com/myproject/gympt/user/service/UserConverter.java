@@ -1,21 +1,30 @@
 package com.myproject.gympt.user.service;
 
 import com.myproject.gympt.Converter;
+import com.myproject.gympt.gpt.model.GPTDTO;
+import com.myproject.gympt.gpt.service.GTPConverter;
 import com.myproject.gympt.user.db.UserEntity;
 import com.myproject.gympt.user.db.UserRepository;
 import com.myproject.gympt.user.model.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserConverter implements Converter<UserDTO, UserEntity> {
     private final UserRepository userRepository;
-
+    private final GTPConverter converter;
     @Override
     public UserDTO toDto(UserEntity userEntity) {
+        List<GPTDTO> gptdtoList = userEntity.getGptEntities()
+                .stream()
+                .map(converter::toDto)
+                .collect(Collectors.toList());
+
         byte b =1;
         if(userEntity.getGptCount() == null){
             b=0;
@@ -32,6 +41,8 @@ public class UserConverter implements Converter<UserDTO, UserEntity> {
                 .simpleAddress(userEntity.getSimpleAddress())
                 .createdAt(userEntity.getCreatedAt())
                 .gptCount((userEntity.getGptCount()==null)? b:userEntity.getGptCount())
+                .status(userEntity.getStatus())
+                .gptList(gptdtoList)
                 .build();
     }
 

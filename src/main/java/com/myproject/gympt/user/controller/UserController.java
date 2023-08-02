@@ -1,6 +1,7 @@
 package com.myproject.gympt.user.controller;
 
 
+import com.myproject.gympt.gpt.model.GPTDTO;
 import com.myproject.gympt.user.model.UserDTO;
 import com.myproject.gympt.user.model.UserRequest;
 import com.myproject.gympt.user.service.RegisterMail;
@@ -9,13 +10,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.zip.DataFormatException;
 
 @Controller
@@ -73,7 +76,7 @@ public class UserController {
 
 
         String registerUser = userRequest.getEmail();
-        if (!userService.haEmail(registerUser)) {
+        if (!userService.hasEmail(registerUser)) {
             bindingResult.rejectValue("email", "DataIntegrityViolation", "이미 등록된 이메일입니다.");
             log.info("회원가입 에러 발생 이메일이 이미 존재함");
             return "registerForm";
@@ -135,5 +138,112 @@ public class UserController {
 
         return user;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/menu")
+    public String myMenu(Principal principal,Model model) throws DataFormatException {
+        UserDTO user = userService.getUser(principal.getName());
+
+        model.addAttribute("user",user);
+        int i = 3 - user.getGptCount();
+
+        model.addAttribute("gptCount",i);
+        return "myMenu";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUser(
+           @RequestParam String password
+            ,@RequestParam String password2
+            , Principal principal){
+
+        if (!password.equals(password2)){
+            return ResponseEntity.badRequest().build();
+        }
+        userService.update(principal,password);
+        return ResponseEntity.ok().build();
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete")
+    public String deleteUser(){
+
+        return "deleteUser";
+
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity<?> deleteUser(Principal principal,
+                                        @RequestBody UserRequest userRequest) throws DataFormatException {
+
+        if (!userRequest.getPassword().equals(userRequest.getPassword2())){
+            return ResponseEntity.badRequest().build();
+        }
+        boolean b = userService.deleteUser(userRequest.getPassword(), principal);
+
+        if (!b){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/find")
+    public String findUserInfo(){
+        return "findUserInfo";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findUserId")
+    @ResponseBody
+    public ResponseEntity<?> findUserId(@RequestBody UserRequest userRequest){
+        if (!code.equals(userRequest.getMemailconfirm())){
+            return ResponseEntity.badRequest().body("인증코드가 다릅니다.");
+        }
+
+        String userId = userService.findUserId(userRequest.getEmail());
+
+        if (userId == null){
+            return ResponseEntity.badRequest().body("존재하지 않는 아이디입니다.");
+        }
+
+        return ResponseEntity.ok().body(userId);
+
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/findUserPw")
+    @ResponseBody
+    public ResponseEntity<?> findUserIdPw(@RequestBody UserRequest userRequest){
+        log.info("findUserIdPw 실행됨 요청값 {}",userRequest);
+
+        UserDTO userDTO = userService.updatePassword(userRequest.getUid()
+                ,userRequest.getEmail()
+                ,userRequest.getPassword());
+
+        if (userDTO.getPassword() == null){
+            log.info("findUserIdPw user DTO가 null임");
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/show-answer")
+    public String gptResponses(Principal principal,Model model){
+        List<GPTDTO> gptResponseList = userService.getGPTResponseList(principal.getName());
+
+        model.addAttribute("responseList",gptResponseList);
+
+
+        return "gptList";
+
+    }
+
 
 }

@@ -1,11 +1,14 @@
 package com.myproject.gympt.user.db;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.myproject.gympt.gpt.db.GptEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -44,4 +47,16 @@ public class UserEntity {
     private String nickName;
     @Column(name = "gpt_count")
     private Byte gptCount;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OrderBy("id desc")
+    @Builder.Default
+            @JsonManagedReference
+
+    private List<GptEntity> gptEntities = List.of();
+    @ColumnDefault("Active")
+    @Column(name = "status", nullable = false)
+    private String status;
+
+
 }

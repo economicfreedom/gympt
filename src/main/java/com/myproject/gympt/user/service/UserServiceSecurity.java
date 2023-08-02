@@ -27,10 +27,15 @@ public class UserServiceSecurity implements UserDetailsService {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
 
+        if(!_user.get().getStatus().equals("Active")){
+                    throw new RuntimeException("탈퇴한 회원입니다.");
+
+
+        }
         UserEntity user = _user.get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if ("admin".equals(uid)) {
+        if ("ADMIN_GYMPT".equals(uid)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         } else {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));

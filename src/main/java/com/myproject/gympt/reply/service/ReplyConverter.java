@@ -20,9 +20,10 @@ public class ReplyConverter implements Converter<ReplyDTO, ReplyEntity> {
         return ReplyDTO
                 .builder()
                 .id(replyEntity.getId())
-                .user(replyEntity.getUser().getId())
+//                .user(replyEntity.getUser().getId())
                 .board(replyEntity.getBoard().getId())
                 .content(replyEntity.getContent())
+                .userEntity(replyEntity.getUser())
                 .createdAt((replyEntity.getCreatedAt()==null)?LocalDateTime.now():replyEntity.getCreatedAt())
                 .build()
                 ;

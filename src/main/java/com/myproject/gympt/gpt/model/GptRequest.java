@@ -12,5 +12,6 @@ public class GptRequest {
     private String discomfort;
     private String purpose;
     private Short age;
+    private String type;
 
 }

@@ -7,6 +7,8 @@ type Mutation{
     updateBoard(input:BoardRequest):Boolean
     createBoard(input:BoardRequest):String
     addReply(input:ReplyRequest):ReplyDTO
+    updateReply(input:ReplyRequest):Boolean
+    deleteReply(input:ReplyRequest):Boolean
 }
 
 
@@ -23,11 +25,13 @@ type BoardDTO {
 
 
 
+
+
 type ReplyDTO{
     id : Long
     user : UserEntity
-    board : Long
     content : String
+    board : Long
 }
 type UserEntity{
     uid:String
@@ -46,7 +50,8 @@ input BoardRequest{
 
 input ReplyRequest{
     boardId:ID!
-    content:String!
+    id:Long
+    content:String
 
 }
 scalar Long

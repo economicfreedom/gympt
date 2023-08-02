@@ -20,7 +20,7 @@ public class GPTService {
     private final GPTRepository gptRepository;
     private final UserRepository userRepository;
 
-    public Byte create(String request, String response, Principal principal) {
+    public Byte create(String request, String response, Principal principal,String type) {
 
         UserEntity userEntity = userRepository.findByUid(principal.getName()).get();
 
@@ -29,6 +29,7 @@ public class GPTService {
                 .request(request)
                 .response(response)
                 .user(userEntity)
+                .type(type)
                 .build();
 
         GptEntity save = gptRepository.save(gptEntity);

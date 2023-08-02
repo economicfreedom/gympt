@@ -67,7 +67,7 @@
     </style>
 </head>
 <body>
-<a href="/user/logout"><p>로그아웃</p></a>
+
 <div class="container">
     <h1>'Gym'PT 로그인</h1>
     <p>로그인하여 식단과 운동</p>
@@ -80,8 +80,25 @@
         <input type="text" name="uId" id="uId" placeholder="Username">
         <input type="password" name="password" id="password" placeholder="Password">
         <input type="submit" value="Login">
+        <a href="/main">둘러보기</a>
     </form>
-    <a href="/user/register">아직 회원이 아니신가요?</a>
+    <a href="/user/register">아직 회원이 아니신가요?/</a>
+     <a href="#" id="open-popup-btn">아이디/비밀번호 찾기</a>
+
 </div>
+
 </body>
+<script>
+        const openPopupBtn = document.getElementById('open-popup-btn');
+
+        openPopupBtn.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent the default behavior of the anchor tag (i.e., navigating to the href)
+            const popupUrl = "/user/find"; // URL of the popup window
+            const popupName = "userFindPopup"; // Name of the popup window (you can choose any name)
+            const popupFeatures = "width=400,height=300,top=100,left=100"; // Popup window features
+
+            // Open the popup window
+            window.open(popupUrl, popupName, popupFeatures);
+        });
+</script>
 </html>

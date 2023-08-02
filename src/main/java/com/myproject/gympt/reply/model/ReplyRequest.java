@@ -10,5 +10,7 @@ import lombok.*;
 @Setter
 public class ReplyRequest {
     private Long boardId;
-    public String content;
+    private String content;
+    private Long id;
+
 }

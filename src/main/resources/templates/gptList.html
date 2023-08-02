@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Response List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .response-list {
+            list-style-type: none;
+        }
+
+        .response-list li {
+            margin-bottom: 10px;
+            padding: 10px 5px; /* Reduced horizontal padding */
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #000000;
+        }
+    </style>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            $(".back-btn").click(function (){
+                history.back();
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>답변 목록</h1>
+    <th:block th:each="gpt:${responseList}">
+        <h3 th:text="${gpt.getType()=='null'? '':gpt.getType()}"></h3>
+        <ul class="response-list">
+
+            <li th:text="${gpt.getResponse()}"></li>
+
+        </ul>
+
+    </th:block>
+        <a href="#" class="back-btn">뒤로가기</a>
+</div>
+</body>
+</html>
