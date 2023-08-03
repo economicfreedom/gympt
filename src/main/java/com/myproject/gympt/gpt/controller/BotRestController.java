@@ -56,6 +56,10 @@ public class BotRestController {
             case "다이어트" -> {
                 prompt = createDietPrompt(age, discomfort, purpose);
             }
+            case "질문" -> {
+                prompt = createAnswer(discomfort);
+            }
+
             default -> {
                 // handle unexpected value of `type`
                 return ResponseEntity.badRequest().build();
@@ -65,14 +69,14 @@ public class BotRestController {
         ChatGptRequest request = new ChatGptRequest(model, prompt);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         String response = chatGptResponse.getChoices().get(0).getMessage().getContent();
-        Byte aByte = gptService.create(prompt, response, principal,gptRequest.getType());
+        Byte aByte = gptService.create(prompt, response, principal, gptRequest.getType());
 
         userService.update(principal);
 
         return ResponseEntity.ok().build();
     }
 
-//    private String createExercisePrompt(short age, String gender, String discomfort, String purpose) {
+    //    private String createExercisePrompt(short age, String gender, String discomfort, String purpose) {
 //        return "당신은 나의 운동 질문에 대해 나의 나이와 성별 그리고" +
 //                " 운동에 불편한 곳 및 운동 목적에 대해 맞는 답변을 내려주셔야합니다." +
 //                " 질문 :  [저는 " + age + "살" +
@@ -82,17 +86,18 @@ public class BotRestController {
 //                "입니다 3일치 운동 루틴을 알려주세요 다른 문장은 작성하지 마시고 운동루틴만 작성해서 보내주세요]";
 //    }
     private String createDietPrompt(short age, String discomfort, String purpose) {
-    return "I am " + age + " years old, and I have an allergy to " + discomfort + "." +
-"My diet goal is " + purpose + "." +
-"Considering my allergy, please provide a suitable meal plan. In Korean";
-}
+        return "I am " + age + " years old, and I have an allergy to " + discomfort + "." +
+                "My diet goal is " + purpose + "." +
+                "Considering my allergy, please provide a suitable meal plan. In Korean";
+    }
 
     private String createExercisePrompt(short age, String gender, String discomfort, String purpose) {
-    return "I am a " + age + " year old " + gender + "." +
-           "I experience discomfort when exercising in " + discomfort + ", and my fitness goal is " + purpose + "." +
-           "Please provide a 3-day exercise routine. In Korean";
-}
-//
+        return "I am a " + age + " year old " + gender + "." +
+                "I experience discomfort when exercising in " + discomfort + ", and my fitness goal is " + purpose + "." +
+                "Please provide a 3-day exercise routine. In Korean";
+    }
+
+    //
 //    private String createDietPrompt(short age, String discomfort, String purpose) {
 //        return "당신은 나의 식단 질문에 대해 나의 성별과 나이 및 알러지가 포함된 성분이 있는 음식은 작성하시면 안되며" +
 //                "식단 목적에 맞는 식단을 답변을 해주세야합니다." +
@@ -101,4 +106,15 @@ public class BotRestController {
 //                "알러지는" + discomfort + "를 가지고 있습니다 식단의 목적은 " + purpose +
 //                " 입니다 이러한 점을 고려한 식단을 알려주세요 다른 문장은 작성하지 마시고 식단만 작성해서 보내주세요]";
 //    }
+    private String createAnswer(String answer) {
+        return
+                "Can you provide a long, well thought out, clear guide on [" + answer + "]?" +
+                        "long, clear guide on [desired topic & question]? " +
+                        "It should include only hard facts and exclude speculation or uncertainty. " +
+                        "speculation or uncertainty. Your explanation should be detailed, comprehensive, in-depth, and thoroughly researched, and provide only accurate and reliable information. At the end of your explanation, indicate the" +
+                        "accuracy of the information provided in % and explain why it is so accurate. Information provided" +
+                        "Two web sources that can be verified for accuracy and a common URL (accurate as of 2021," +
+                        ".com, .gov, .org level) that can verify the accuracy of the information provided. reply in korean";
+
+    }
 }

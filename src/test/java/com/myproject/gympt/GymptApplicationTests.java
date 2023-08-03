@@ -33,8 +33,9 @@ class GymptApplicationTests {
     private UserRepository userRepository;
 
     @Autowired
-    private UserUpdateCount userUpdateCount;
-
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Test
     void contextLoads() {
         System.out.println(1);
@@ -111,10 +112,7 @@ class GymptApplicationTests {
         System.out.println("실행종료");
         System.out.println(maxId);
     }
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
     @Test void 패스워드엔코더와패스워드() throws DataFormatException {
 
         UserDTO dto = userService.getUser("dpfoqm12");
@@ -166,6 +164,13 @@ class GymptApplicationTests {
 
     }
     @Test
+    void 계정삭제(){
+        Optional<UserEntity> byId = userRepository.findById(2L);
+        UserEntity userEntity = byId.get();
+        userEntity.setEmail("asdf");
+        userRepository.save(userEntity);
+    }
+    @Test
     void 어드민계정생성(){
         UserEntity userEntity = UserEntity.builder()
                 .gptCount((byte) 0)
@@ -183,6 +188,6 @@ class GymptApplicationTests {
     }
     @Test
     void 모든유저지피티사용횟수0으로초기화(){
-        userUpdateCount.userGptCountUpdate();
+        userRepository.resetAllGptCounts();
     }
 }

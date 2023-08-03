@@ -27,6 +27,7 @@ public class BotController {
         switch (num){
             case 1 -> show="gympt";
             case 2 -> show="diet";
+            case 3 -> show="answerGPT";
             default -> show = "redirect:/main";
         }
 

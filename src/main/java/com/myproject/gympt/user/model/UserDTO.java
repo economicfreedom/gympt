@@ -42,5 +42,6 @@ public class UserDTO {
     private String nickName;
     private byte gptCount;
     private String status;
+    @Builder.Default
     private List<GPTDTO> gptList = List.of();
 }

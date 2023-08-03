@@ -16,9 +16,7 @@ public class GraphQLTestController {
                 graphQLTestDTO = GraphQLTestDTO
                         .builder()
                         .title("제목1")
-                        .testData1("테스트 데이터1")
                         .content("테스트컨 컨텐츠1")
-                        .name("테스트 네임1")
                         .build();
 
 
@@ -27,9 +25,7 @@ public class GraphQLTestController {
                 graphQLTestDTO = GraphQLTestDTO
                         .builder()
                         .title("제목2")
-                        .testData1("테스트 데이터2")
                         .content("테스트컨 컨텐츠2")
-                        .name("테스트 네임2")
                         .build();
 
             }
@@ -37,9 +33,7 @@ public class GraphQLTestController {
                 graphQLTestDTO = GraphQLTestDTO
                         .builder()
                         .title("제목3")
-                        .testData1("테스트 데이터3")
                         .content("테스트컨 컨텐츠3")
-                        .name("테스트 네임3")
                         .build();
 
             }

@@ -27,8 +27,6 @@ type BoardDTO {
 type GraphQLTestDTO{
     title:String
     name:String
-    content:String
-    testData1:String
 }
 
 
