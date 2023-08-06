@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        input[type="number"]::placeholder,
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        button {
+            background-color: black;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #333;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#go").click(function (e) {
+
+                e.preventDefault();
+                $('#loadingOverlay').fadeIn();
+
+
+                let discomfort = $("#discomfort").val();
+
+                if (discomfort ===null || discomfort ==""){
+                    $("#discomfort").focus();
+                    return;
+                }
+                // var prompt = " 질문 :  [저는 " + age + "살" +
+                //     " " + gender + "이고 " +
+                //     "운동에 불편한 곳은 " + discomfort +
+                //     " 저의  운동 목적은 " + purpose +
+                //     "입니다 3일치 운동 루틴을 알려주세요 다른 문장은 작성하지 마시고 운동루틴만 작성해서 보내주세요]";
+
+                $.ajax({
+                    url: `/bot/chat`,
+                    type: 'POST',
+                    contentType:"application/json",
+                    data: JSON.stringify({
+                        type:$("#type").val(),
+                        discomfort:discomfort,
+
+                    }),
+                    beforeSend: function () {
+                        $("#test").empty()
+                        $("#loading").show();
+                        alert("요청 되셨습니다 잠시만 기다려주세요.")
+                    },
+                    success: function (text) {
+
+                        $("#loading").hide();
+                        location.href="/user/show-answer";
+                        alert("답장이 왔어요 내 정보에서 확인해주세요!");
+                    },
+                    error: function () {
+                        alert("뭔가 잘못되었나봐요 나중에 다시 시도해주세요...");
+                    }
+                });
+            });
+            $("#back").click(function (){
+                history.back()
+
+            })
+        });
+    </script>
+
+
+</head>
+<body>
+<button id="back">< < <</button>
+<div id="test">
+
+
+    <label for="discomfort">원하는 주제 & 질문 :</label>
+    <input type="text" name="discomfort" id="discomfort">
+
+
+
+<button id="go">제출</button>
+</div>
+<div hidden="hidden" align="center" id="loading" style="display: none;">
+        <img alt="ss" th:src="@{/gympt.png}"  style="height: auto ;width: auto ">
+    </div>
+<input type="hidden" value="질문" id="type">
+</body>
+</html>
