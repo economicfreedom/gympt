@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.myproject.gympt.GymptApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-08-02T16:27:49" hostname="GYUHA" time="0.513">
+<testsuite name="com.myproject.gympt.GymptApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-08-03T13:11:56" hostname="GYUHA" time="0.754">
   <properties/>
-  <testcase name="모든유저지피티사용횟수0으로초기화()" classname="com.myproject.gympt.GymptApplicationTests" time="0.513"/>
-  <system-out><![CDATA[01:27:44.714 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.myproject.gympt.GymptApplicationTests]: GymptApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-01:27:44.812 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.myproject.gympt.GymptApplication for test class com.myproject.gympt.GymptApplicationTests
+  <testcase name="크롤링테스트()" classname="com.myproject.gympt.GymptApplicationTests" time="0.754"/>
+  <system-out><![CDATA[22:11:51.321 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.myproject.gympt.GymptApplicationTests]: GymptApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:11:51.426 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.myproject.gympt.GymptApplication for test class com.myproject.gympt.GymptApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -13,33 +13,40 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.1.2)
 
-2023-08-03T01:27:45.150+09:00  INFO 24060 --- [    Test worker] c.myproject.gympt.GymptApplicationTests  : Starting GymptApplicationTests using Java 17.0.7 with PID 24060 (started by gyuha in C:\Users\gyuha\IdeaProjects\gympt)
-2023-08-03T01:27:45.151+09:00  INFO 24060 --- [    Test worker] c.myproject.gympt.GymptApplicationTests  : No active profile set, falling back to 1 default profile: "default"
-2023-08-03T01:27:45.965+09:00  INFO 24060 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2023-08-03T01:27:46.095+09:00  INFO 24060 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 121 ms. Found 4 JPA repository interfaces.
-2023-08-03T01:27:46.200+09:00  WARN 24060 --- [    Test worker] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.myproject.gympt]' package. Please check your configuration.
-2023-08-03T01:27:46.549+09:00  INFO 24060 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2023-08-03T01:27:46.604+09:00  INFO 24060 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
-2023-08-03T01:27:46.606+09:00  INFO 24060 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2023-08-03T01:27:46.736+09:00  INFO 24060 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-08-03T01:27:46.840+09:00  INFO 24060 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2023-08-03T01:27:46.855+09:00  INFO 24060 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2023-08-03T01:27:47.103+09:00  INFO 24060 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@14b48f39
-2023-08-03T01:27:47.105+09:00  INFO 24060 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2023-08-03T01:27:47.342+09:00  INFO 24060 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2023-08-03T01:27:47.899+09:00  INFO 24060 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2023-08-03T01:27:47.957+09:00  INFO 24060 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2023-08-03T01:27:48.202+09:00  INFO 24060 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2023-08-03T01:27:48.716+09:00  WARN 24060 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2023-08-03T01:27:48.839+09:00  INFO 24060 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1d9c18b9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@447cdbaa, org.springframework.security.web.context.SecurityContextHolderFilter@222557fc, org.springframework.security.web.header.HeaderWriterFilter@1cfa5e46, org.springframework.security.web.authentication.logout.LogoutFilter@2258ca14, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6d95b51d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@c5dc3db, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2910c3ae, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5e774546, org.springframework.security.web.access.ExceptionTranslationFilter@106c4a72, org.springframework.security.web.access.intercept.AuthorizationFilter@1ab6a093]
-2023-08-03T01:27:49.413+09:00  INFO 24060 --- [    Test worker] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
-2023-08-03T01:27:49.587+09:00  INFO 24060 --- [    Test worker] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
-2023-08-03T01:27:49.918+09:00  INFO 24060 --- [    Test worker] c.myproject.gympt.GymptApplicationTests  : Started GymptApplicationTests in 4.961 seconds (process running for 5.954)
-Hibernate: 
-    update
-        user 
-    set
-        gpt_count=cast(0 as signed)
+2023-08-03T22:11:51.719+09:00  INFO 10112 --- [    Test worker] c.myproject.gympt.GymptApplicationTests  : Starting GymptApplicationTests using Java 17.0.7 with PID 10112 (started by gyuha in C:\Users\gyuha\IdeaProjects\gympt)
+2023-08-03T22:11:51.720+09:00  INFO 10112 --- [    Test worker] c.myproject.gympt.GymptApplicationTests  : No active profile set, falling back to 1 default profile: "default"
+2023-08-03T22:11:52.489+09:00  INFO 10112 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-03T22:11:52.603+09:00  INFO 10112 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 4 JPA repository interfaces.
+2023-08-03T22:11:52.713+09:00  WARN 10112 --- [    Test worker] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.myproject.gympt]' package. Please check your configuration.
+2023-08-03T22:11:53.048+09:00  INFO 10112 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-03T22:11:53.107+09:00  INFO 10112 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.6.Final
+2023-08-03T22:11:53.110+09:00  INFO 10112 --- [    Test worker] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2023-08-03T22:11:53.226+09:00  INFO 10112 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-08-03T22:11:53.324+09:00  INFO 10112 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2023-08-03T22:11:53.337+09:00  INFO 10112 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-03T22:11:53.587+09:00  INFO 10112 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1a4cbcc6
+2023-08-03T22:11:53.588+09:00  INFO 10112 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-03T22:11:53.816+09:00  INFO 10112 --- [    Test worker] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2023-08-03T22:11:54.376+09:00  INFO 10112 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-03T22:11:54.434+09:00  INFO 10112 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-03T22:11:54.671+09:00  INFO 10112 --- [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2023-08-03T22:11:55.163+09:00  WARN 10112 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-03T22:11:55.277+09:00  INFO 10112 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@56daf3b1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7ba0c0e5, org.springframework.security.web.context.SecurityContextHolderFilter@57bebe03, org.springframework.security.web.header.HeaderWriterFilter@4a0b1701, org.springframework.security.web.authentication.logout.LogoutFilter@784dd9da, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@55145dc5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@dcf495c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@60610a2b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1ee2e363, org.springframework.security.web.access.ExceptionTranslationFilter@4cb1af3f, org.springframework.security.web.access.intercept.AuthorizationFilter@4e387da1]
+2023-08-03T22:11:55.880+09:00  INFO 10112 --- [    Test worker] efaultSchemaResourceGraphQlSourceBuilder : Loaded 1 resource(s) in the GraphQL schema.
+2023-08-03T22:11:56.095+09:00  INFO 10112 --- [    Test worker] s.b.a.g.s.GraphQlWebMvcAutoConfiguration : GraphQL endpoint HTTP POST /graphql
+2023-08-03T22:11:56.403+09:00  INFO 10112 --- [    Test worker] c.myproject.gympt.GymptApplicationTests  : Started GymptApplicationTests in 4.857 seconds (process running for 5.758)
+<a href="https://n.news.naver.com/mnews/article/011/0004222028?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">윤재옥 "특수교사 불합리한 징계 막을 것…입법·지원방안 검토"</a>
+<a href="https://n.news.naver.com/mnews/article/055/0001078579?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">김영호 통일장관 "종전선언 절대로 추진 않겠다"</a>
+<a href="https://n.news.naver.com/mnews/article/469/0000753252?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">'나흘 만에 사과' 김은경, 사퇴설 일축했지만... 혁신은 좌초 위기</a>
+<a href="https://n.news.naver.com/mnews/article/008/0004920960?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">민주당, '문재인 출당 요구' 당원 글 삭제···"해당 행위 징계"</a>
+<a href="https://n.news.naver.com/mnews/article/032/0003240446?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">김은경, 사과 방문···노인회장, ‘김은경 사진’ 때리며 “정신 차려라”</a>
+<a href="https://n.news.naver.com/mnews/article/654/0000048196?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">국힘 "에어컨 빵빵히 트시라…전국 경로당에 10만원씩 냉방비 지원"</a>
+<a href="https://n.news.naver.com/mnews/article/023/0003779553?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">부정부패로 잘린 공직자 14명, 비리 관련된 기업에 재취업</a>
+<a href="https://n.news.naver.com/mnews/article/421/0006969550?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">한 총리 "김현숙, 잼버리 끝날 때까지 현장 지켜라"</a>
+<a href="https://n.news.naver.com/mnews/article/052/0001918047?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">대통령실 "한미일 정상회의 발표문 협의 중...정례화 공감대"</a>
+<a href="https://n.news.naver.com/mnews/article/028/0002650761?sid=100" class="sh_text_headline nclicks(cls_pol.clsart)">이동관, 강남 재건축 수십억 차익…신고 없이 쪼개기 증여도</a>
+테스트 
+ 테스트
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+<script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+<script>
+    var eco;
+    var soc;
+    var poli;
+    var it;
+    $(document).ready(function () {
+
+        $.ajax({
+            url: "/word/api",
+            type: "GET",
+            contentType: "application/json",
+            success: function (response) {
+                console.log(response.eco)
+                eco = response.eco
+                soc = response.soc
+                poli = response.poli
+                it = response.it
+            }
+
+
+        })
+        anychart.onDocumentReady(function () {
+            console.log(eco)
+            var eco_cloud = [
+                {"x": eco.content1, value: 80},
+                {"x": eco.content2, value: 56},
+                {"x": eco.content3, value: 44},
+                {"x": eco.content4, value: 40},
+                {"x": eco.content5, value: 36},
+                {"x": eco.content6, value: 32},
+                {"x": eco.content7, value: 28},
+                {"x": eco.content8, value: 24},
+                {"x": eco.content9, value: 20},
+                {"x": eco.content10, value: 12},
+
+
+            ];
+            var eco_chart = anychart.tagCloud(eco_cloud);
+            eco_chart.angles([0]);
+            eco_chart.container("eco");
+            // chart.getCredits().setEnabled(false);
+            eco_chart.draw();
+
+            var poli_cloud = [
+                {"x": poli.content1, value: 80},
+                {"x": poli.content2, value: 56},
+                {"x": poli.content3, value: 44},
+                {"x": poli.content4, value: 40},
+                {"x": poli.content5, value: 36},
+                {"x": poli.content6, value: 32},
+                {"x": poli.content7, value: 28},
+                {"x": poli.content8, value: 24},
+                {"x": poli.content9, value: 20},
+                {"x": poli.content10, value: 12},
+            ]
+            var poli_chart = anychart.tagCloud(poli_cloud);
+            poli_chart.angles([0]);
+            poli_chart.container("poli");
+            // chart.getCredits().setEnabled(false);
+            poli_chart.draw();
+
+
+            var soc_cloud = [
+                {"x": soc.content1, value: 80},
+                {"x": soc.content2, value: 56},
+                {"x": soc.content3, value: 44},
+                {"x": soc.content4, value: 40},
+                {"x": soc.content5, value: 36},
+                {"x": soc.content6, value: 32},
+                {"x": soc.content7, value: 28},
+                {"x": soc.content8, value: 24},
+                {"x": soc.content9, value: 20},
+                {"x": soc.content10, value: 12},
+            ]
+            var soc_chart = anychart.tagCloud(soc_cloud);
+            soc_chart.angles([0]);
+            soc_chart.container("soc");
+            // chart.getCredits().setEnabled(false);
+            soc_chart.draw();
+
+            var it_cloud = [
+                {"x": it.content1, value: 80},
+                {"x": it.content2, value: 56},
+                {"x": it.content3, value: 44},
+                {"x": it.content4, value: 40},
+                {"x": it.content5, value: 36},
+                {"x": it.content6, value: 32},
+                {"x": it.content7, value: 28},
+                {"x": it.content8, value: 24},
+                {"x": it.content9, value: 20},
+                {"x": it.content10, value: 12},
+            ]
+            var it_chart = anychart.tagCloud(it_cloud);
+            it_chart.angles([0]);
+            it_chart.container("it");
+            it_chart.draw();
+
+        });
+
+    })
+
+</script>
+<body>
+
+<div class="chart-area">
+    <h1 align="center">경제</h1>
+    <div id="eco" style="width:100%; height:100%;"></div>
+    <h3 align="center" th:text="${eco.getResponse()}"></h3>
+
+    <h1 align="center">정치</h1>
+    <div id="poli" style="width:100%; height:100%;"></div>
+    <h3 align="center" th:text="${poli.getResponse()}"></h3>
+
+    <h1 align="center">사회</h1>
+    <div id="soc" style="width:100%; height:100%;"></div>
+    <h3 align="center" th:text="${soc.getResponse()}"></h3>
+
+    <h1 align="center">IT/과학</h1>
+    <div id="it" style="width:100%; height:100%;"></div>
+    <h3 align="center" th:text="${it.getResponse()}"></h3>
+</div>
+
+</body>
+</html>

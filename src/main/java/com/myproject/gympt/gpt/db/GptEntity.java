@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,14 +25,14 @@ public class GptEntity {
     @Column(name = "response", nullable = false, columnDefinition = "MEDIUMTEXT")
     private String response;
 
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "user_id" )
-@JsonBackReference
-private UserEntity user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private UserEntity user;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-    @Column(name ="type")
+    @Column(name = "type")
     private String type;
     // Constructors, getters, and setters (omitted for brevity)
 

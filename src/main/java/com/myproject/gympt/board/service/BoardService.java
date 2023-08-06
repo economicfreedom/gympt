@@ -66,6 +66,7 @@ public class BoardService  {
 
         Page<BoardEntity> list = boardRepository.findByTitleLikeAndBoardTypeLike(pageable, title, type);
 
+
         Pagination pagination = Pagination.builder()
                 .page(list.getNumber())//현재 페이지
                 .size(list.getSize())// 사이즈 몇개를 요청 했는지에 대한 숫자
