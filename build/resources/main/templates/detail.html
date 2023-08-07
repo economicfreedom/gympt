@@ -8,7 +8,6 @@
         $(document).ready(function () {
 
 
-
             $.ajax({
                 url: "/graphql", // GraphQL 서버의 엔드포인트 URL을 적어주세요.
                 contentType: "application/json",
@@ -86,7 +85,7 @@
 
                 // 삭제할 게시물의 ID를 가져옵니다.
                 const idToDelete = Number($("#board_id").val());
-                if (!confirm("정말로 삭제하시겠습니까?")){
+                if (!confirm("정말로 삭제하시겠습니까?")) {
                     return
                 }
                 // 서버로 삭제 요청을 보냅니다.
@@ -105,7 +104,7 @@
                     }),
                     success: function (response) {
 
-                        location.href="/main"
+                        location.href = "/main"
                     },
                     error: function (err) {
 
@@ -118,8 +117,6 @@
             $("#add-reply").click(function () {
                 const board_id_val = $("#board_id").val();
                 const board_id = Number(board_id_val);
-
-
 
 
                 const commentContent = $("#commentContent").val();
@@ -504,16 +501,16 @@
         </div>
         <hr>
         <th:block sec:authorize="isAuthenticated()">
-        <div class="comment-form">
-            <h2>댓글 작성</h2>
-            <div>
-                <label for="commentContent">댓글:</label>
-                <textarea id="commentContent" rows="4" required></textarea>
+            <div class="comment-form">
+                <h2>댓글 작성</h2>
+                <div>
+                    <label for="commentContent">댓글:</label>
+                    <textarea id="commentContent" rows="4" required></textarea>
+                </div>
+                <button id="add-reply" type="button">댓글 등록</button>
             </div>
-            <button id="add-reply" type="button">댓글 등록</button>
-        </div>
+    </th:block>
     </div>
 </div>
-</th:block>
 </body>
 </html>

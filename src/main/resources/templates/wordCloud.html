@@ -20,10 +20,11 @@
             contentType: "application/json",
             success: function (response) {
                 console.log(response.eco)
-                eco = response.eco
-                soc = response.soc
-                poli = response.poli
-                it = response.it
+                eco = response.eco;
+                poli = response.poli;
+                soc = response.soc;
+                console.log(soc)
+                it = response.it;
             }
 
 
@@ -105,29 +106,67 @@
             it_chart.draw();
 
         });
-
+        $('#back-button').click(function () {
+            history.back();
+        });
     })
 
 </script>
 <body>
+<nav>
+    <button id="back-button"><<<</button>
+</nav>
 
 <div class="chart-area">
     <h1 align="center">경제</h1>
     <div id="eco" style="width:100%; height:100%;"></div>
+    <div align="center">
+        <img alt="ss" th:src="@{/gymp.png}" style="height: 200px ;width: 200px ">
+    </div>
     <h3 align="center" th:text="${eco.getResponse()}"></h3>
+    <hr>
 
     <h1 align="center">정치</h1>
     <div id="poli" style="width:100%; height:100%;"></div>
+    <div align="center">
+        <img alt="ss" th:src="@{/gymp.png}" style="height: 200px ;width: 200px ">
+    </div>
     <h3 align="center" th:text="${poli.getResponse()}"></h3>
-
+    <hr>
     <h1 align="center">사회</h1>
     <div id="soc" style="width:100%; height:100%;"></div>
+    <div align="center">
+        <img alt="ss" th:src="@{/gymp.png}" style="height: 200px ;width: 200px ">
+    </div>
     <h3 align="center" th:text="${soc.getResponse()}"></h3>
-
+    <hr>
     <h1 align="center">IT/과학</h1>
     <div id="it" style="width:100%; height:100%;"></div>
+    <div align="center">
+        <img alt="ss" th:src="@{/gymp.png}" style="height: 200px ;width: 200px ">
+    </div>
     <h3 align="center" th:text="${it.getResponse()}"></h3>
+    <hr>
 </div>
 
 </body>
+<style>
+    nav {
+        background-color: #f8f8f8; /* Light Gray */
+        padding: 10px;
+    }
+
+    #back-button {
+        background-color: #000; /* Black */
+        color: #FFF; /* White */
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    #back-button:hover {
+        background-color: #555; /* Dark Gray */
+    }
+
+</style>
 </html>

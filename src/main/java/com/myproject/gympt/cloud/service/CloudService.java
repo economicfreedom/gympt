@@ -4,12 +4,14 @@ package com.myproject.gympt.cloud.service;
 import com.myproject.gympt.cloud.db.*;
 import com.myproject.gympt.cloud.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CloudService {
     private final ItCloudRepository itCloudRepository;
     private final PoliticsCloudRepository politicsCloudRepository;
@@ -44,10 +46,13 @@ public class CloudService {
         list.add(itCloudDTO);
         Map<String,Object> map = new HashMap<>();
 
+
+
         map.put("poli",poliCloudDTO);
         map.put("soc",socCloudDTO);
         map.put("eco",ecoCloudDTO);
         map.put("it",itCloudDTO);
+
 
 
 
@@ -57,28 +62,28 @@ public class CloudService {
     }
 
     public ReqAndResDTO getEcoReqAndReq(){
-        RequestAndResponseEntity eoc = reqAndResRepository.findByNewsTypeAndMaxCloudId("eco").get();
+        RequestAndResponseEntity eco = reqAndResRepository.findByNewsTypeAndMaxCloudId("eco").get();
 
 
-        return reqAndResConverter.toDto(eoc);
+        return reqAndResConverter.toDto(eco);
     }
     public ReqAndResDTO getSocReqAndReq(){
-        RequestAndResponseEntity eoc = reqAndResRepository.findByNewsTypeAndMaxCloudId("nav").get();
+        RequestAndResponseEntity nav = reqAndResRepository.findByNewsTypeAndMaxCloudId("nav").get();
 
 
-        return reqAndResConverter.toDto(eoc);
+        return reqAndResConverter.toDto(nav);
     }
     public ReqAndResDTO getItReqAndReq(){
-        RequestAndResponseEntity eoc = reqAndResRepository.findByNewsTypeAndMaxCloudId("sci").get();
+        RequestAndResponseEntity sci = reqAndResRepository.findByNewsTypeAndMaxCloudId("sci").get();
 
 
-        return reqAndResConverter.toDto(eoc);
+        return reqAndResConverter.toDto(sci);
     }
     public ReqAndResDTO getPoliReqAndReq(){
-        RequestAndResponseEntity eoc = reqAndResRepository.findByNewsTypeAndMaxCloudId("pol").get();
+        RequestAndResponseEntity poli = reqAndResRepository.findByNewsTypeAndMaxCloudId("pol").get();
 
 
-        return reqAndResConverter.toDto(eoc);
+        return reqAndResConverter.toDto(poli);
     }
 
 }
