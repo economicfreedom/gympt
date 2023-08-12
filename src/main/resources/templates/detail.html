@@ -12,9 +12,7 @@
                 url: "/graphql", // GraphQL 서버의 엔드포인트 URL을 적어주세요.
                 contentType: "application/json",
                 type: 'POST',
-                // headers: {
-                //     "Authorization": "Bearer your-token" // 만약 필요한 경우, 인증 토큰을 헤더에 추가하세요.
-                // },
+          
                 data: JSON.stringify({
                     query: `
       query ($id: ID) {
@@ -181,7 +179,6 @@
                 window.history.back();
             });
             $(document).on('click', '.edit-button', function () {
-                // 해당 버튼에 가장 가까운 comment-content 클래스를 찾음
 
                 let commentId = $(this).closest('.test').find('.comment-content').data('id');
                 let commentContent = $(this).closest('.test').find('.comment-content').text();
